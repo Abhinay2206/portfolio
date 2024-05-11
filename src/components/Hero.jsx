@@ -1,49 +1,75 @@
-import { motion } from 'framer-motion'
-import { styles } from '../styles'
-import { StarsCanvas } from './canvas'
-//import { ComputersCanvas } from './canvas'
+import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { styles } from '../styles';
+import { StarsCanvas } from './canvas';
+
+const Typewriter = ({ text, onComplete }) => {
+  const [displayText, setDisplayText] = useState('');
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (index < text.length) {
+        setDisplayText((prevText) => prevText + text[index]);
+        setIndex((prevIndex) => prevIndex + 1);
+      } else {
+        clearInterval(intervalId); 
+        onComplete(); 
+      }
+    }, 120); 
+
+    return () => clearInterval(intervalId);
+  }, [index, text, onComplete]);
+
+  return <span className={`${styles.heroHeadText} text-white`}>{displayText}</span>;
+};
 
 const Hero = () => {
+  const [showSubText, setShowSubText] = useState(false);
+
+  const handleTypewriterComplete = () => {
+    setShowSubText(true);
+  };
+
   return (
     <>
-      <section className={`relative w-full h-screen mx-auto top-50px`} >
-      <StarsCanvas/>
-      <div className={`absolute inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`} style={{ marginTop: '70px' }}>
-        <div className='flex flex-col justify-center items-center mt-5'>
-          <div className='w-5 h-5 rounded-full bg-[#915EFF]' />
-          <div className='w-1 sm:h-80 h-40 violet-gradient' />
-        </div>
-        <div>
-          <h1 className={`${styles.heroHeadText} text-white`}>
-            Hi, I'm <span className='text-[#915EFF]'>Abhinay</span>
-          </h1>
-          <p className={`${styles.heroSubText} mt-2 text-white-100`}>
-            I develop websites, user <br className='sm:block hidden' />
-            interfaces and web applications
-          </p>
-        </div>
-      </div>
-      {/* <ComputersCanvas /> */}
-      <div className='absolute xs:bottom-10 bottom-32 w-full flex justify-center items-center'>
-        <a href='#about'>
-          <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
-            <motion.div
-              animate={{
-                y: [0, 24, 0],
-              }}
-              transition={{
-                duration: 1.5,
-                repeat: Infinity,
-                repeatType: "loop",
-              }}
-              className='w-3 h-3 rounded-full bg-secondary mb-1'
-            />
+      <section className={`relative w-full h-screen mx-auto top-50px`}>
+        <StarsCanvas />
+        <div className={`absolute inset-0 top-[120px]  max-w-7xl mx-auto ${styles.paddingX} flex flex-row items-start gap-5`} style={{ marginTop: '70px' }}>
+          <div className='flex flex-col justify-center items-center mt-5'>
+            <div className='w-5 h-5 rounded-full bg-[#fff]' />
+            <div className='w-1 sm:h-60 h-40 black-gradient' />
           </div>
-        </a>
-      </div>
-    </section>
+          <div>
+            <Typewriter text="Hi, I'm Abhinay" onComplete={handleTypewriterComplete} />
+            {showSubText && (
+              <p className={`${styles.heroSubText} mt-2 text-white-100`}>
+                I develop websites, user <br className='sm:block hidden' />
+                interfaces and web applications
+              </p>
+            )}
+          </div>
+        </div>
+        <div className='absolute xs:bottom-10 bottom-32 w-full flex justify-center items-center'>
+          <a href='#about'>
+            <div className='w-[35px] h-[64px] rounded-3xl border-4 border-secondary flex justify-center items-start p-2'>
+              <motion.div
+                animate={{
+                  y: [0, 24, 0],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  repeatType: 'loop',
+                }}
+                className='w-3 h-3 rounded-full bg-secondary mb-1'
+              />
+            </div>
+          </a>
+        </div>
+      </section>
     </>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

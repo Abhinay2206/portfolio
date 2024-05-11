@@ -1,8 +1,8 @@
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import emailjs from "@emailjs/browser";
-//import { StarsCanvas } from "./canvas";
+import { StarsCanvas } from "./canvas";
 import { styles } from "../styles";
+// eslint-disable-next-line no-unused-vars
 import { EarthCanvas } from "./canvas";
 import { SectionWrapper } from "../hoc";
 import { slideIn } from "../utils/motion";
@@ -30,47 +30,16 @@ const Contact = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-
-    emailjs
-      .send(
-        import.meta.env.VITE_APP_EMAILJS_SERVICE_ID,
-        import.meta.env.VITE_APP_EMAILJS_TEMPLATE_ID,
-        {
-          from_name: form.name,
-          to_name: "Abhinay",
-          from_email: form.email,
-          to_email: "gamerabhi788@gmail.com",
-          message: form.message,
-        },
-        import.meta.env.VITE_APP_EMAILJS_PUBLIC_KEY
-      )
-      .then(
-        () => {
-          setLoading(false);
-          alert("Thank you. I will get back to you as soon as possible.");
-
-          setForm({
-            name: "",
-            email: "",
-            message: "",
-          });
-        },
-        (error) => {
-          setLoading(false);
-          console.error(error);
-
-          alert("Ahh, something went wrong. Please try again.");
-        }
-      );
   };
 
   return (
     <div
       className={`xl:mt-12 flex xl:flex-row flex-col-reverse gap-10 overflow-hidden`}
     >
+      <StarsCanvas/>
       <motion.div
         variants={slideIn("left", "tween", 0.2, 1)}
-        className='flex-[0.75] bg-black-100 p-8 rounded-2xl'
+        className='flex-[0.75] p-8 rounded-2xl'
       >
         <p className={styles.sectionSubText}>Get in touch</p>
         <h3 className={styles.sectionHeadText}>Contact.</h3>
@@ -80,7 +49,7 @@ const Contact = () => {
           onSubmit={handleSubmit}
           className='mt-12 flex flex-col gap-8'
         >
-          <label className='flex flex-col'>
+          <label className='flex flex-col input-container'>
             <span className='text-white font-medium mb-4'>Your Name</span>
             <input
               type='text'
@@ -91,7 +60,7 @@ const Contact = () => {
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
           </label>
-          <label className='flex flex-col'>
+          <label className='flex flex-col input-container'>
             <span className='text-white font-medium mb-4'>Your email</span>
             <input
               type='email'
@@ -102,7 +71,7 @@ const Contact = () => {
               className='bg-tertiary py-4 px-6 placeholder:text-secondary text-white rounded-lg outline-none border-none font-medium'
             />
           </label>
-          <label className='flex flex-col'>
+          <label className='flex flex-col input-container'>
             <span className='text-white font-medium mb-4'>Your Message</span>
             <textarea
               rows={7}
@@ -127,7 +96,7 @@ const Contact = () => {
         variants={slideIn("right", "tween", 0.2, 1)}
         className='xl:flex-1 xl:h-auto md:h-[550px] h-[350px]'
       >
-        <EarthCanvas />
+        {/* <EarthCanvas /> */}
       </motion.div>
     </div>
   );

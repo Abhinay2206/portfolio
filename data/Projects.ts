@@ -75,5 +75,34 @@ export const projects = [
         ],
         impact: "Achieved 95% accuracy in water quality classification, enabling faster and more reliable water quality monitoring"
       }
+    },
+    {
+      title: "Attendance Bot for NGIT and KMEC Colleges",
+      description: "A Telegram bot specifically designed for NGIT and KMEC colleges to automate attendance tracking.",
+      tech: ["Node.js", "Telegraf", "Puppeteer"],
+      features: [
+        "Automated attendance tracking tailored for NGIT and KMEC colleges",
+        "Real-time attendance updates for timely monitoring",
+        "Customizable attendance reports for detailed analysis",
+        "Integration with existing educational platforms for a cohesive experience"
+      ],
+      demo: "https://project3.demo",
+      github: "https://github.com/Abhinay2206/attendence_bot",
+      projectDetails: {
+        overview: "The attendance_bot leverages the power of Telegram's bot API to provide a seamless experience for students, teachers, and administrators of these institutions.",
+        images: [],
+        challenges: [
+          "Ensuring reliable data extraction through web scraping",
+          "Maintaining a user-friendly interface for diverse users",
+          "Implementing robust error handling for minimal downtime"
+        ],
+        solutions: [
+          "Built using Node.js and the Telegraf framework for a robust and scalable architecture",
+          "Utilized Puppeteer for web scraping and automation to ensure efficient data extraction",
+          "Supported multiple browsers for flexibility and adaptability",
+          "Implemented a robust error handling system for reliability"
+        ],
+        impact: "Streamlined attendance tracking process, reducing administrative workload and improving accuracy."
+      }
     }
   ];  

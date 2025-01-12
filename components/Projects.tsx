@@ -45,7 +45,7 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
           Featured Projects
         </h2>
         <div className="grid md:grid-cols-2 gap-8">
-          {projects.map((project) => (
+          {projects.slice(0, 2).map((project) => ( // Show only the first 2 projects
             <div 
               key={project.title} 
               className="group relative overflow-hidden rounded-2xl transition-all duration-500 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800 hover:border-violet-500 dark:hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/20"

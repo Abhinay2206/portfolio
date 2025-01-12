@@ -3,6 +3,7 @@ import { ExternalLink, Github, ArrowLeft } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { projects } from '../../data/Projects';
+
 export default function ProjectsPage() {
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-32">
@@ -75,13 +76,13 @@ export default function ProjectsPage() {
                 </div>
 
                 <div className="flex gap-4">
-                  <a 
-                    href={project.demo}
+                  <Link 
+                    href={`/projectDetails?title=${encodeURIComponent(project.title)}`}
                     className="group flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition-all duration-300"
                   >
                     <ExternalLink size={18} className="group-hover:rotate-12 transition-transform duration-300" />
-                    Live Demo
-                  </a>
+                    More Details
+                  </Link>
                   <a 
                     href={project.github}
                     className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-black dark:border-black hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"

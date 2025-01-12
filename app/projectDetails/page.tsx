@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { ExternalLink, Github, ArrowLeftIcon, Calendar, Clock, Tag } from 'lucide-react';
 import { projects } from '../../data/Projects';
 import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
 
 interface ProjectDetails {
   overview: string;
@@ -11,7 +12,7 @@ interface ProjectDetails {
   impact?: string;
 }
 
-const ProjectDetails = () => {
+const ProjectDetailsContent = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const title = searchParams?.get('title') || '';
@@ -23,7 +24,7 @@ const ProjectDetails = () => {
     day: 'numeric'
   });
 
-  const readingTime = '10 min read'; 
+  const readingTime = '10 min read';
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-violet-50 dark:from-gray-900 dark:to-gray-800">
@@ -186,6 +187,14 @@ const ProjectDetails = () => {
         </article>
       </div>
     </div>
+  );
+};
+
+const ProjectDetails = () => {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <ProjectDetailsContent />
+    </Suspense>
   );
 };
 

@@ -1,4 +1,17 @@
-export const skills = {
+
+export interface Skill {
+  name: string;
+  proficiency: number;
+  experience: 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+}
+
+export interface SkillCategories {
+  Frontend: Skill[];
+  Backend: Skill[];
+  MachineLearning: Skill[];
+}
+
+export const skills: SkillCategories = {
   Frontend: [
     { name: "React", proficiency: 90, experience: "Expert" },
     { name: "Next.js", proficiency: 75, experience: "Intermediate" },
@@ -20,4 +33,4 @@ export const skills = {
     { name: "Scikit-learn", proficiency: 75, experience: "Intermediate" },
     { name: "Neural Networks", proficiency: 75, experience: "Intermediate" }
   ]
-}
+};

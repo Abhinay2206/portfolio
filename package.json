@@ -14,7 +14,6 @@
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-tilt": "^1.0.2",
     "react-tsparticles": "^2.12.2",
     "react-type-animation": "^3.2.0",
     "tailwindcss-animate": "^1.0.7",
@@ -24,7 +23,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@types/node": "^20",
-    "@types/react": "^19",
+    "@types/react": "^18.3.18",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "15.1.4",

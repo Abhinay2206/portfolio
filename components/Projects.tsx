@@ -36,72 +36,99 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
 
   return (
     <section ref={containerRef} className="py-32 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-violet-100/40 via-transparent to-transparent dark:from-violet-900/10" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-violet-200/30 via-fuchsia-100/20 to-transparent dark:from-violet-800/20 dark:via-fuchsia-900/10" />
       <motion.div 
         className="max-w-7xl mx-auto px-6 relative z-10"
         style={{ opacity, scale, y }}
       >
-        <h2 className="text-5xl font-bold mb-16 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent animate-gradient">
+        <h2 className="text-6xl font-bold mb-20 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent animate-gradient tracking-tight">
           Featured Projects
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          {projects.slice(0, 2).map((project) => ( // Show only the first 2 projects
-            <div 
+        <div className="grid md:grid-cols-2 gap-12">
+          {projects.slice(0, 2).map((project) => ( 
+            <motion.div 
               key={project.title} 
-              className="group relative overflow-hidden rounded-2xl transition-all duration-500 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800 hover:border-violet-500 dark:hover:border-violet-500 hover:shadow-2xl hover:shadow-violet-500/20"
+              className="group relative overflow-hidden rounded-3xl transition-all duration-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600"
+              whileHover={{ scale: 1.02 }}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-600/10 to-indigo-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="absolute inset-0 bg-grid-pattern opacity-[0.03] group-hover:opacity-[0.05] transition-opacity duration-500" />
-              <div className="absolute -inset-x-2 -inset-y-2 bg-gradient-to-r from-violet-600/30 to-indigo-600/30 opacity-0 group-hover:opacity-100 blur-xl transition-all duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-violet-400/10 dark:via-fuchsia-400/10 dark:to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-700" />
+              <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/20 via-fuchsia-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700" />
               
-              <div className="p-8 relative">
-                <h3 className="text-2xl font-bold mb-4 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent group-hover:scale-105 transition-transform duration-300">
+              <div className="p-10 relative">
+                <motion.h3 
+                  className="text-3xl font-bold mb-6 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent"
+                  whileHover={{ scale: 1.05 }}
+                >
                   {project.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+                </motion.h3>
+                <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
                   {project.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-2 mb-8">
+                <div className="flex flex-wrap gap-3 mb-10">
                   {project.tech.map((tech) => (
-                    <span 
+                    <motion.span 
                       key={tech} 
-                      className="px-4 py-1.5 rounded-full text-sm bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 hover:scale-110 hover:rotate-1 transition-all duration-300 cursor-default"
+                      className="px-5 py-2.5 rounded-2xl text-sm font-medium bg-violet-50/80 dark:bg-violet-900/20 text-violet-700 dark:text-violet-200 backdrop-blur-sm hover:bg-violet-100 dark:hover:bg-violet-800/30 transition-all duration-300 cursor-default"
+                      whileHover={{ 
+                        scale: 1.05, 
+                        rotate: 2,
+                        boxShadow: '0 10px 30px -10px rgba(139, 92, 246, 0.3)'
+                      }}
                     >
                       {tech}
-                    </span>
+                    </motion.span>
                   ))}
                 </div>
 
-                <div className="flex gap-4">
-                  <button 
+                <div className="flex gap-6">
+                  <motion.button 
                     onClick={() => handleMoreDetailsClick(project.title)} 
-                    className="group flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition-all duration-300"
+                    className="flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
+                    whileHover={{ scale: 1.05, backgroundPosition: "right center" }}
+                    whileTap={{ scale: 0.95 }}
+                    style={{ backgroundSize: "200% auto" }}
                   >
-                    <ExternalLink size={18} className="group-hover:rotate-12 transition-transform duration-300" />
-                    More Details
-                  </button>
-                  <a 
+                    <ExternalLink size={20} />
+                    <span>More Details</span>
+                  </motion.button>
+                  <motion.a 
                     href={project.github} 
-                    className="group flex items-center gap-2 px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-300"
+                    className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-violet-300 dark:border-violet-700 hover:border-violet-500 dark:hover:border-violet-600 text-lg font-medium backdrop-blur-sm"
+                    whileHover={{ scale: 1.05, backgroundColor: "rgba(139, 92, 246, 0.1)" }}
+                    whileTap={{ scale: 0.95 }}
                   >
-                    <Github size={18} className="group-hover:scale-110 transition-transform duration-300" />
-                    Source Code
-                  </a>
+                    <Github size={20} className="text-violet-600 dark:text-violet-400" />
+                    <span className="text-violet-600 dark:text-violet-400">Source Code</span>
+                  </motion.a>
                 </div>
               </div>
-            </div>
+            </motion.div>
           ))}
         </div>
-        <div className="flex justify-center mt-16">
+        <motion.div 
+          className="flex justify-center mt-20"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           <a
             href="/projects"
-            className="group relative px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white overflow-hidden shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-300"
+            className="group flex items-center gap-3 px-10 py-5 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white text-xl font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-500"
           >
-            <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
-            <span className="relative z-10">View More Projects</span>
+            <span className="relative z-10">Explore All Projects</span>
+            <motion.span 
+              className="relative z-10"
+              animate={{ x: [0, 5, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              →
+            </motion.span>
           </a>
-        </div>
+        </motion.div>
       </motion.div>
     </section>
   );

@@ -40,78 +40,106 @@ export const Contact = () => {
         className="max-w-7xl mx-auto px-6 relative z-10"
         style={{ opacity, scale, y }}
       >
-        <h2 className="text-5xl font-bold mb-16 bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
-          Get in Touch
+        <h2 className="text-6xl font-bold mb-16 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent animate-gradient tracking-tight">
+          Let&apos;s Connect
         </h2>
-        <div className="grid md:grid-cols-2 gap-8">
-          <div className="p-8 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Name</label>
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300"
-                  placeholder="Your name"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300"
-                  placeholder="your.email@example.com"
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-sm font-medium">Message</label>
-                <textarea
-                  name="message"
-                  value={formData.message}
-                  onChange={handleInputChange}
-                  rows={4}
-                  className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300"
-                  placeholder="Your message..."
-                  required
-                />
-              </div>
-              <button 
-                type="submit"
-                className="w-full px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition-all duration-300"
+        <div className="grid md:grid-cols-2 gap-12">
+          <motion.div 
+            className="group relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all duration-500"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-violet-400/10 dark:via-fuchsia-400/10 dark:to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-500" />
+            <div className="p-10">
+              <form onSubmit={handleSubmit} className="space-y-8">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-6 py-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400"
+                    placeholder="John Doe"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    className="w-full px-6 py-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400"
+                    placeholder="john@example.com"
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleInputChange}
+                    rows={4}
+                    className="w-full px-6 py-4 rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400"
+                    placeholder="Tell me about your project..."
+                    required
+                  />
+                </div>
+                <motion.button 
+                  type="submit"
+                  className="w-full px-8 py-4 rounded-2xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
+                  whileHover={{ scale: 1.02, backgroundPosition: "right center" }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{ backgroundSize: "200% auto" }}
+                >
+                  Send Message
+                </motion.button>
+              </form>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            className="group relative overflow-hidden rounded-3xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all duration-500"
+            whileHover={{ scale: 1.02 }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-violet-400/10 dark:via-fuchsia-400/10 dark:to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-500" />
+            <div className="p-10 space-y-8">
+              <motion.a 
+                href="mailto:bakkeraabhinay@gmail.com" 
+                className="group flex items-center gap-6 p-6 rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
+                whileHover={{ scale: 1.02, x: 10 }}
               >
-                Send Message
-              </button>
-            </form>
-          </div>
-          <div className="p-8 rounded-2xl bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border border-gray-200 dark:border-gray-800">
-            <div className="space-y-8">
-              <a href="mailto:bakkeraabhinay@gmail.com" className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-                <div className="p-3 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
+                <div className="p-4 rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Mail size={24} />
                 </div>
-                <span>bakkeraabhinay@gmail.com</span>
-              </a>
-              <a href="https://github.com/Abhinay2206" className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-                <div className="p-3 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-lg text-gray-700 dark:text-gray-300">bakkeraabhinay@gmail.com</span>
+              </motion.a>
+              <motion.a 
+                href="https://github.com/Abhinay2206" 
+                className="group flex items-center gap-6 p-6 rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
+                whileHover={{ scale: 1.02, x: 10 }}
+              >
+                <div className="p-4 rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Github size={24} />
                 </div>
-                <span>github.com/Abhinay2206</span>
-              </a>
-              <a href="https://linkedin.com/in/bakkeraabhinay" className="group flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 dark:hover:bg-gray-800 transition-all duration-300">
-                <div className="p-3 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
+                <span className="text-lg text-gray-700 dark:text-gray-300">github.com/Abhinay2206</span>
+              </motion.a>
+              <motion.a 
+                href="https://linkedin.com/in/bakkeraabhinay" 
+                className="group flex items-center gap-6 p-6 rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
+                whileHover={{ scale: 1.02, x: 10 }}
+              >
+                <div className="p-4 rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Linkedin size={24} />
                 </div>
-                <span>linkedin.com/in/bakkeraabhinay</span>
-              </a>
+                <span className="text-lg text-gray-700 dark:text-gray-300">linkedin.com/in/bakkeraabhinay</span>
+              </motion.a>
             </div>
-          </div>
+          </motion.div>
         </div>
       </motion.div>
     </section>

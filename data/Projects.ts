@@ -171,7 +171,7 @@ export const projects = [
           "Created automated health checks and self-healing mechanisms",
           "Built comprehensive logging and monitoring system"
         ],
-        impact: "Deployed across 2 institutions serving 5000+ students, reducing administrative time by 80% and improving attendance tracking accuracy to 99%"
+        impact: "Deployed across 2 institutions, reducing administrative time by 80% and improving attendance tracking accuracy to 99%"
       }
     }
   ];  

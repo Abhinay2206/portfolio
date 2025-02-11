@@ -158,7 +158,7 @@ export const Hero = () => {
             initial="hidden"
             animate="visible"
           >
-            <h1 className="text-7xl font-bold leading-tight tracking-tight">
+            <h1 className="text-6xl font-bold leading-tight tracking-tight">
               <motion.span 
                 className="block bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 dark:from-violet-400 dark:via-fuchsia-300 dark:to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
                 whileHover={{ scale: 1.02 }}

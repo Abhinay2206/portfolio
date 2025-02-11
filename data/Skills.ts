@@ -20,4 +20,4 @@ export const skills = {
     { name: "Scikit-learn", proficiency: 75, experience: "Intermediate" },
     { name: "Neural Networks", proficiency: 75, experience: "Intermediate" }
   ]
-} as SkillCategory;
+}

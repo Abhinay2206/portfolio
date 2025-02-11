@@ -35,20 +35,20 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
   };
 
   return (
-    <section ref={containerRef} className="py-32 relative">
+    <section ref={containerRef} className="py-16 md:py-32 relative">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-violet-200/30 via-fuchsia-100/20 to-transparent dark:from-violet-800/20 dark:via-fuchsia-900/10" />
       <motion.div 
-        className="max-w-7xl mx-auto px-6 relative z-10"
+        className="max-w-7xl mx-auto px-4 md:px-6 relative z-10"
         style={{ opacity, scale, y }}
       >
-        <h2 className="text-6xl font-bold mb-20 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent animate-gradient tracking-tight">
+        <h2 className="text-4xl md:text-6xl font-bold mb-12 md:mb-20 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent animate-gradient tracking-tight text-center md:text-left">
           Featured Projects
         </h2>
-        <div className="grid md:grid-cols-2 gap-12">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12">
           {projects.slice(0, 2).map((project) => ( 
             <motion.div 
               key={project.title} 
-              className="group relative overflow-hidden rounded-3xl transition-all duration-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600"
+              className="group relative overflow-hidden rounded-2xl md:rounded-3xl transition-all duration-700 bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600"
               whileHover={{ scale: 1.02 }}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -58,22 +58,22 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
               <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-700" />
               <div className="absolute -inset-1 bg-gradient-to-r from-violet-500/20 via-fuchsia-500/20 to-indigo-500/20 opacity-0 group-hover:opacity-100 blur-2xl transition-all duration-700" />
               
-              <div className="p-10 relative">
+              <div className="p-6 md:p-10 relative">
                 <motion.h3 
-                  className="text-3xl font-bold mb-6 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent"
+                  className="text-2xl md:text-3xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent"
                   whileHover={{ scale: 1.05 }}
                 >
                   {project.title}
                 </motion.h3>
-                <p className="text-lg text-gray-600 dark:text-gray-300 mb-8 leading-relaxed">
+                <p className="text-base md:text-lg text-gray-600 dark:text-gray-300 mb-6 md:mb-8 leading-relaxed">
                   {project.description}
                 </p>
                 
-                <div className="flex flex-wrap gap-3 mb-10">
+                <div className="flex flex-wrap gap-2 md:gap-3 mb-8 md:mb-10">
                   {project.tech.map((tech) => (
                     <motion.span 
                       key={tech} 
-                      className="px-5 py-2.5 rounded-2xl text-sm font-medium bg-violet-50/80 dark:bg-violet-900/20 text-violet-700 dark:text-violet-200 backdrop-blur-sm hover:bg-violet-100 dark:hover:bg-violet-800/30 transition-all duration-300 cursor-default"
+                      className="px-4 md:px-5 py-2 md:py-2.5 rounded-xl md:rounded-2xl text-xs md:text-sm font-medium bg-violet-50/80 dark:bg-violet-900/20 text-violet-700 dark:text-violet-200 backdrop-blur-sm hover:bg-violet-100 dark:hover:bg-violet-800/30 transition-all duration-300 cursor-default"
                       whileHover={{ 
                         scale: 1.05, 
                         rotate: 2,
@@ -85,24 +85,24 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
                   ))}
                 </div>
 
-                <div className="flex gap-6">
+                <div className="flex flex-col sm:flex-row gap-4 md:gap-6">
                   <motion.button 
                     onClick={() => handleMoreDetailsClick(project.title)} 
-                    className="flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
+                    className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-base md:text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 w-full sm:w-auto"
                     whileHover={{ scale: 1.05, backgroundPosition: "right center" }}
                     whileTap={{ scale: 0.95 }}
                     style={{ backgroundSize: "200% auto" }}
                   >
-                    <ExternalLink size={20} />
+                    <ExternalLink size={18} />
                     <span>More Details</span>
                   </motion.button>
                   <motion.a 
                     href={project.github} 
-                    className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-violet-300 dark:border-violet-700 hover:border-violet-500 dark:hover:border-violet-600 text-lg font-medium backdrop-blur-sm"
+                    className="flex items-center justify-center gap-2 md:gap-3 px-6 md:px-8 py-3 md:py-4 rounded-xl border-2 border-violet-300 dark:border-violet-700 hover:border-violet-500 dark:hover:border-violet-600 text-base md:text-lg font-medium backdrop-blur-sm w-full sm:w-auto"
                     whileHover={{ scale: 1.05, backgroundColor: "rgba(139, 92, 246, 0.1)" }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    <Github size={20} className="text-violet-600 dark:text-violet-400" />
+                    <Github size={18} className="text-violet-600 dark:text-violet-400" />
                     <span className="text-violet-600 dark:text-violet-400">Source Code</span>
                   </motion.a>
                 </div>
@@ -111,13 +111,13 @@ export const Projects: React.FC<ProjectsProps> = ({ projects }) => {
           ))}
         </div>
         <motion.div 
-          className="flex justify-center mt-20"
+          className="flex justify-center mt-12 md:mt-20"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <a
             href="/projects"
-            className="group flex items-center gap-3 px-10 py-5 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white text-xl font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-500"
+            className="group flex items-center gap-2 md:gap-3 px-8 md:px-10 py-4 md:py-5 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white text-lg md:text-xl font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-500"
           >
             <span className="relative z-10">Explore All Projects</span>
             <motion.span 

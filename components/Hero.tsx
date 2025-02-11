@@ -1,10 +1,11 @@
-import { ArrowDown, MessageSquare, Github, Linkedin, Sparkles } from 'lucide-react';
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
+import { ArrowDown, MessageSquare, Github, Linkedin, Sparkles, Star, Code, Cpu } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 
 export const Hero = () => {
-  const containerRef = useRef<HTMLElement>(null);
+  const containerRef = useRef(null);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isHovered, setIsHovered] = useState(false);
   
   const { scrollYProgress } = useScroll({
@@ -17,58 +18,46 @@ export const Hero = () => {
   const y = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
   const blur = useTransform(scrollYProgress, [0, 0.5], [0, 10]);
 
-  const fallVariants = {
-    hidden: { opacity: 0, y: -50 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-        bounce: 0.3
-      }
-    })
-  };
-
-  const glowVariants = {
-    initial: { opacity: 0.5, scale: 1 },
-    animate: {
-      opacity: [0.5, 1, 0.5],
-      scale: [1, 1.05, 1],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const floatVariants = {
-    initial: { y: 0 },
-    animate: {
-      y: [-10, 10, -10],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    }
-  };
-
-  const handleDownloadResume = () => {
-    // Create a link element
+  const handleResumeDownload = () => {
     const link = document.createElement('a');
-    link.href = '/data/resume.pdf';
+    link.href = '/resume.pdf';
     link.download = 'Abhinay_Karthik_Resume.pdf';
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
   };
 
+  const orbs = [
+    { icon: <Code className="w-6 h-6" />, color: "from-violet-500/20" },
+    { icon: <Star className="w-6 h-6" />, color: "from-fuchsia-500/20" },
+    { icon: <Cpu className="w-6 h-6" />, color: "from-indigo-500/20" },
+  ];
+
   return (
     <section ref={containerRef} className="min-h-screen flex items-center justify-center relative overflow-hidden perspective-1000">
+      {/* Animated background orbs */}
+      {orbs.map((orb, index) => (
+        <motion.div
+          key={index}
+          className={`absolute w-96 h-96 rounded-full bg-gradient-radial ${orb.color} to-transparent opacity-50 blur-xl`}
+          animate={{
+            x: [0, 30, 0],
+            y: [0, -30, 0],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{
+            duration: 8,
+            delay: index * 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          style={{
+            left: `${30 + index * 20}%`,
+            top: `${20 + index * 15}%`,
+          }}
+        />
+      ))}
+
       <motion.div 
         className="absolute inset-0"
         initial={{ opacity: 0, scale: 1.1 }}
@@ -79,11 +68,16 @@ export const Hero = () => {
         <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.04] dark:opacity-[0.06] animate-[pulse_8s_ease-in-out_infinite]" />
         <motion.div 
           className="absolute inset-0 bg-gradient-to-b from-transparent via-white/20 to-white/30 dark:via-black/20 dark:to-black/30 backdrop-blur-[2px]"
-          variants={glowVariants}
-          initial="initial"
-          animate="animate"
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 4,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_transparent_20%,_rgba(139,92,246,0.1)_70%)]" />
       </motion.div>
 
       <motion.div 
@@ -100,86 +94,121 @@ export const Hero = () => {
             transformStyle: "preserve-3d"
           }}
         >
+          {/* Status badge with enhanced animation */}
           <motion.div 
             className="flex items-center gap-6 flex-wrap"
-            variants={fallVariants}
-            custom={0}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
           >
             <motion.div
               className="px-6 py-3 rounded-full text-base font-medium bg-violet-100/80 backdrop-blur-sm dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-800/50 hover:bg-violet-200/80 dark:hover:bg-violet-800/50 transition-all duration-300 shadow-lg hover:shadow-violet-500/25"
               whileHover={{ 
                 scale: 1.05,
-                rotate: -1,
-                transition: { duration: 0.2 }
+                rotate: [-1, 1, -1],
+                transition: { duration: 0.3 }
               }}
-              whileTap={{ scale: 0.95 }}
-              variants={floatVariants}
-              animate="animate"
             >
               <span className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 animate-spin-slow" />
-                ✨ Available for work
+                <motion.div
+                  animate={{
+                    rotate: [0, 360],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                >
+                  <Sparkles className="w-4 h-4" />
+                </motion.div>
+                Available for work
               </span>
             </motion.div>
+
             <div className="flex gap-4">
-              <motion.a 
-                href="https://github.com/Abhinay2206" 
-                className="p-3 rounded-xl bg-violet-100/80 backdrop-blur-sm dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
-                whileHover={{ 
-                  scale: 1.1, 
-                  rotate: 5,
-                  backgroundColor: "rgba(139, 92, 246, 0.2)"
-                }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Github size={22} className="transform hover:rotate-12 transition-transform" />
-              </motion.a>
-              <motion.a 
-                href="https://linkedin.com/in/bakkeraabhinay" 
-                className="p-3 rounded-xl bg-violet-100/80 backdrop-blur-sm dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
-                whileHover={{ 
-                  scale: 1.1, 
-                  rotate: -5,
-                  backgroundColor: "rgba(139, 92, 246, 0.2)"
-                }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <Linkedin size={22} className="transform hover:-rotate-12 transition-transform" />
-              </motion.a>
+              {[
+                { icon: <Github size={22} />, href: "https://github.com/Abhinay2206", rotate: 5 },
+                { icon: <Linkedin size={22} />, href: "https://linkedin.com/in/bakkeraabhinay", rotate: -5 }
+              ].map((social, index) => (
+                <motion.a
+                  key={index}
+                  href={social.href}
+                  className="p-3 rounded-xl bg-violet-100/80 backdrop-blur-sm dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 border border-violet-200 dark:border-violet-800 hover:shadow-lg hover:shadow-violet-500/25 transition-all duration-300"
+                  whileHover={{ 
+                    scale: 1.1,
+                    rotate: social.rotate,
+                    backgroundColor: "rgba(139, 92, 246, 0.2)"
+                  }}
+                  whileTap={{ scale: 0.9 }}
+                >
+                  <motion.div
+                    whileHover={{ rotate: 360 }}
+                    transition={{ duration: 0.4 }}
+                  >
+                    {social.icon}
+                  </motion.div>
+                </motion.a>
+              ))}
             </div>
           </motion.div>
 
           <motion.div 
             className="space-y-10"
-            variants={fallVariants}
-            custom={1}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <h1 className="text-6xl font-bold leading-tight tracking-tight">
-              <motion.span 
-                className="block bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 dark:from-violet-400 dark:via-fuchsia-300 dark:to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
+            <h1 className="text-6xl md:text-7xl font-bold leading-tight tracking-tight">
+              <motion.div
+                className="relative inline-block"
                 whileHover={{ scale: 1.02 }}
               >
-                <TypeAnimation
-                  sequence={[
-                    "Hi, I'm Abhinay Karthik",
-                    3000,
-                    "I Build Digital Experiences",
-                    3000,
-                  ]}
-                  wrapper="span"
-                  speed={40}
-                  repeat={Infinity}
-                  cursor={true}
-                />
-              </motion.span>
+                <span className="block bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 dark:from-violet-400 dark:via-fuchsia-300 dark:to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                  <TypeAnimation
+                    sequence={[
+                      "Hi, I'm Abhinay Karthik",
+                      3000,
+                      "I Build Digital Experiences",
+                      3000,
+                      "I Create AI Solutions",
+                      3000,
+                    ]}
+                    wrapper="span"
+                    speed={40}
+                    repeat={Infinity}
+                    cursor={true}
+                  />
+                </span>
+                <motion.span
+                  className="absolute -z-10 blur-3xl opacity-50 bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 bg-clip-text text-transparent"
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <TypeAnimation
+                    sequence={[
+                      "Hi, I'm Abhinay Karthik",
+                      3000,
+                      "I Build Digital Experiences",
+                      3000,
+                      "I Create AI Solutions",
+                      3000,
+                    ]}
+                    wrapper="span"
+                    speed={40}
+                    repeat={Infinity}
+                    cursor={false}
+                  />
+                </motion.span>
+              </motion.div>
               <motion.span 
-                className="block mt-8 text-5xl text-gray-700 dark:text-gray-300"
-                variants={fallVariants}
-                custom={2}
+                className="block mt-8 text-4xl md:text-5xl text-gray-700 dark:text-gray-300"
                 whileHover={{ scale: 1.02 }}
               >
                 Full-Stack Developer & ML Enthusiast
@@ -187,8 +216,9 @@ export const Hero = () => {
             </h1>
             <motion.p 
               className="text-xl text-gray-600 dark:text-gray-400 max-w-3xl leading-relaxed"
-              variants={fallVariants}
-              custom={3}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.8 }}
             >
               Crafting exceptional digital experiences through modern web applications and pushing the boundaries of machine learning innovation.
             </motion.p>
@@ -196,39 +226,34 @@ export const Hero = () => {
 
           <motion.div 
             className="flex flex-wrap gap-6 pt-8"
-            variants={fallVariants}
-            custom={4}
-            initial="hidden"
-            animate="visible"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 1 }}
           >
             <motion.button 
-              onClick={handleDownloadResume}
-              className="flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 text-white text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-300"
+              onClick={handleResumeDownload}
+              className="group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 via-fuchsia-500 to-indigo-600 text-white text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 transition-all duration-300 relative overflow-hidden"
               whileHover={{ 
-                scale: 1.05, 
+                scale: 1.05,
                 backgroundPosition: "right center",
                 boxShadow: "0 20px 40px -15px rgba(139, 92, 246, 0.5)"
               }}
               whileTap={{ scale: 0.95 }}
-              style={{ backgroundSize: "200% auto" }}
               onMouseEnter={() => setIsHovered(true)}
               onMouseLeave={() => setIsHovered(false)}
             >
-              <AnimatePresence>
-                {isHovered && (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0 }}
-                    className="absolute inset-0 bg-white/10 rounded-xl"
-                  />
-                )}
-              </AnimatePresence>
+              <motion.div
+                className="absolute inset-0 bg-white/20"
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "100%" }}
+                transition={{ duration: 0.6 }}
+              />
               <ArrowDown size={20} className="animate-bounce" />
-              <span>Download Resume</span>
+              <span className="relative z-10">Download Resume</span>
             </motion.button>
+
             <motion.button 
-              className="flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-violet-300 dark:border-violet-700 hover:border-violet-500 dark:hover:border-violet-600 text-lg font-medium backdrop-blur-sm relative overflow-hidden group"
+              className="group flex items-center gap-3 px-8 py-4 rounded-xl border-2 border-violet-300 dark:border-violet-700 hover:border-violet-500 dark:hover:border-violet-600 text-lg font-medium backdrop-blur-sm relative overflow-hidden"
               whileHover={{ 
                 scale: 1.05,
                 backgroundColor: "rgba(139, 92, 246, 0.1)"
@@ -236,9 +261,15 @@ export const Hero = () => {
               whileTap={{ scale: 0.95 }}
             >
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                animate={{ x: [-100, 400] }}
-                transition={{ repeat: Infinity, duration: 2, ease: "linear" }}
+                className="absolute inset-0 bg-gradient-to-r from-violet-500/10 to-fuchsia-500/10"
+                animate={{
+                  x: ["-100%", "100%"],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
               />
               <MessageSquare size={20} className="text-violet-600 dark:text-violet-400 transform group-hover:rotate-12 transition-transform" />
               <a href="#contact" className="text-violet-600 dark:text-violet-400">Let&apos;s Talk</a>
@@ -249,3 +280,5 @@ export const Hero = () => {
     </section>
   );
 };
+
+export default Hero;

@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Navigation } from '../components/Navigation';
 import { Hero } from '../components/Hero';
+import About from '../components/About';
 import { Skills } from '../components/Skills';
 import { Projects } from '../components/Projects';
 import { Contact } from '../components/Contact';
@@ -35,7 +36,6 @@ const Home = () => {
       window.addEventListener('scroll', handleScroll, { passive: true });
       window.addEventListener('resize', checkMobile);
       
-      // Initial checks
       handleScroll();
       checkMobile();
       
@@ -57,15 +57,30 @@ const Home = () => {
       transition: {
         duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.2
+        staggerChildren: 0.1 
       }
     },
     exit: {
       opacity: 0,
       y: -20,
       transition: {
-        duration: 0.4,
+        duration: 0.3, 
         ease: "easeIn"
+      }
+    }
+  };
+
+  const sectionVariants = {
+    initial: {
+      opacity: 0,
+      y: 20 
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
       }
     }
   };
@@ -80,7 +95,7 @@ const Home = () => {
         className="relative"
       >
         <motion.div
-          className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 origin-left z-50"
+          className="fixed top-0 left-0 right-0 h-0.5 md:h-1 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 origin-left z-50"
           style={{ 
             scaleX,
             transformOrigin: "0%",
@@ -96,19 +111,66 @@ const Home = () => {
             ease: "linear"
           }}
         />
+
         <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-          <div className={`relative ${!isMobile ? 'will-change-transform' : ''}`} style={{
-            perspective: isMobile ? 'none' : '1000px',
-            transformStyle: isMobile ? 'flat' : 'preserve-3d'
-          }}>
+          <div 
+            className={`relative ${!isMobile ? 'will-change-transform' : ''}`} 
+            style={{
+              perspective: isMobile ? 'none' : '1000px',
+              transformStyle: isMobile ? 'flat' : 'preserve-3d',
+              overflowX: 'hidden' 
+            }}
+          >
             <Navigation scrolled={scrolled} />
-            <Hero />
-            <Skills skills={skills} />
-            <Projects projects={projects.map(project => ({
-              ...project,
-              demo: project.demo || ''
-            }))} />
-            <Contact />
+            
+            <div className="space-y-16 md:space-y-24">
+              <Hero />
+              
+              <motion.div
+                variants={sectionVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                className="px-4 md:px-0"
+              >
+                <About />
+              </motion.div>
+
+              <motion.div
+                variants={sectionVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                className="px-4 md:px-0"
+              >
+                <Skills skills={skills} />
+              </motion.div>
+
+              <motion.div
+                variants={sectionVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                className="px-4 md:px-0"
+              >
+                <Projects 
+                  projects={projects.map(project => ({
+                    ...project,
+                    demo: project.demo || ''
+                  }))} 
+                />
+              </motion.div>
+
+              <motion.div
+                variants={sectionVariants}
+                initial="initial"
+                whileInView="animate"
+                viewport={{ once: true, margin: "-50px" }}
+                className="px-4 md:px-0"
+              >
+                <Contact />
+              </motion.div>
+            </div>
           </div>
         </div>
       </motion.div>

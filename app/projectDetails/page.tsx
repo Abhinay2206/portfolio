@@ -43,6 +43,14 @@ const ProjectDetailsContent = () => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentProjectIndex]);
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextImage();
+    }, 3000); // Change image every 3 seconds
+
+    return () => clearInterval(interval);
+  }, [currentImageIndex]);
+
   const date = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',

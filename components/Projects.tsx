@@ -6,7 +6,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, useScroll, useTransform } from 'framer-motion';
 
-interface ProjectsProps {
+export interface ProjectsProps {
   projects: Project[];
 }
 

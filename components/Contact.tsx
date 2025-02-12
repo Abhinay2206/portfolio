@@ -116,7 +116,7 @@ export const Contact = () => {
                 <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-base sm:text-lg text-gray-700 dark:text-gray-300 break-all">bakkeraabhinay@gmail.com</span>
+                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300 break-all">bakkeraabhinay@gmail.com</span>
               </motion.a>
               <motion.a 
                 href="https://github.com/Abhinay2206" 
@@ -126,7 +126,7 @@ export const Contact = () => {
                 <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Github className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-base sm:text-lg text-gray-700 dark:text-gray-300">github.com/Abhinay2206</span>
+                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300">github.com/Abhinay2206</span>
               </motion.a>
               <motion.a 
                 href="https://linkedin.com/in/bakkeraabhinay" 
@@ -136,7 +136,7 @@ export const Contact = () => {
                 <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
                   <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
                 </div>
-                <span className="text-base sm:text-lg text-gray-700 dark:text-gray-300">linkedin.com/in/bakkeraabhinay</span>
+                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300">linkedin.com/in/bakkeraabhinay</span>
               </motion.a>
             </div>
           </motion.div>

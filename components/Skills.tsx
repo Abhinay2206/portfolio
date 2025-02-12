@@ -12,7 +12,7 @@ interface SkillCategory {
   [key: string]: Skill[];
 }
 
-interface SkillsProps {
+export interface SkillsProps {
   skills: SkillCategory;
 }
 

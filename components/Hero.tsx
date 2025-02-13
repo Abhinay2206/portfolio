@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform } from "framer-motion"
 import { useRef, useState } from "react"
 import { TypeAnimation } from "react-type-animation"
 
+
 export const Hero = () => {
   const containerRef = useRef(null)
   // eslint-disable-next-line @typescript-eslint/no-unused-vars

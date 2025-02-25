@@ -1,6 +1,6 @@
 import { Mail, Github, Linkedin } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { useRef, FormEvent, useState } from 'react';
+import { useRef } from 'react';
 
 export const Contact = () => {
   const containerRef = useRef<HTMLElement>(null);
@@ -9,137 +9,120 @@ export const Contact = () => {
     offset: ["start end", "end start"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0, 1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.8, 1, 0.8]);
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [100, 0, -100]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 0.5]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1, 0.98]);
+  const y = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    const mailtoLink = `mailto:bakkeraabhinay@gmail.com?subject=Contact from ${formData.name}&body=From: ${formData.name}%0D%0AEmail: ${formData.email}%0D%0A%0D%0AMessage:%0D%0A${formData.message}`;
-    window.location.href = mailtoLink;
-  };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
+  const socialLinks = [
+    {
+      icon: <Mail className="w-7 h-7" />,
+      title: "Email",
+      link: "mailto:bakkeraabhinay@gmail.com",
+      display: "bakkeraabhinay@gmail.com",
+      color: "from-violet-600 to-fuchsia-600"
+    },
+    {
+      icon: <Github className="w-7 h-7" />,
+      title: "GitHub", 
+      link: "https://github.com/Abhinay2206",
+      display: "github.com/Abhinay2206",
+      color: "from-fuchsia-600 to-indigo-600"
+    },
+    {
+      icon: <Linkedin className="w-7 h-7" />,
+      title: "LinkedIn",
+      link: "https://linkedin.com/in/bakkeraabhinay",
+      display: "linkedin.com/in/bakkeraabhinay", 
+      color: "from-indigo-600 to-violet-600"
+    }
+  ];
 
   return (
-    <section ref={containerRef} id="contact" className="py-16 sm:py-32 relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-violet-100/40 via-transparent to-transparent dark:from-violet-900/10" />
+    <section ref={containerRef} id="contact" className="py-32 sm:py-40 relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-violet-200/30 via-transparent to-transparent dark:from-violet-800/20" />
+      
       <motion.div 
-        className="max-w-7xl mx-auto px-4 sm:px-6 relative z-10"
+        className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10"
         style={{ opacity, scale, y }}
       >
-        <h2 className="text-4xl sm:text-6xl font-bold mb-8 sm:mb-16 bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 bg-clip-text text-transparent animate-gradient tracking-tight text-center sm:text-left">
-          Let&apos;s Connect
-        </h2>
-        <div className="grid md:grid-cols-2 gap-6 sm:gap-12">
-          <motion.div 
-            className="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all duration-500"
-            whileHover={{ scale: 1.02 }}
+        <div className="text-center mb-20">
+          <motion.h2 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent animate-gradient tracking-tight"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-violet-400/10 dark:via-fuchsia-400/10 dark:to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-500" />
-            <div className="p-6 sm:p-10">
-              <form onSubmit={handleSubmit} className="space-y-6 sm:space-y-8">
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400 text-base sm:text-lg"
-                    placeholder="John Doe"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
-                  <input
-                    type="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400 text-base sm:text-lg"
-                    placeholder="john@example.com"
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    rows={4}
-                    className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-50/50 dark:bg-gray-800/50 border-0 focus:ring-2 focus:ring-violet-500 transition-all duration-300 placeholder:text-gray-400 text-base sm:text-lg"
-                    placeholder="Tell me about your project..."
-                    required
-                  />
-                </div>
-                <motion.button 
-                  type="submit"
-                  className="w-full px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 text-white text-base sm:text-lg font-medium shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40"
-                  whileHover={{ scale: 1.02, backgroundPosition: "right center" }}
-                  whileTap={{ scale: 0.98 }}
-                  style={{ backgroundSize: "200% auto" }}
-                >
-                  Send Message
-                </motion.button>
-              </form>
-            </div>
-          </motion.div>
+            Let&apos;s Connect
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2 }}
+            className="mt-6 text-lg text-gray-600 dark:text-gray-300"
+          >
+            Feel free to reach out through any of these platforms
+          </motion.p>
+        </div>
 
-          <motion.div 
-            className="group relative overflow-hidden rounded-2xl sm:rounded-3xl bg-white/90 dark:bg-gray-900/90 backdrop-blur-xl border border-gray-100/50 dark:border-gray-800/50 hover:border-violet-400 dark:hover:border-violet-600 transition-all duration-500"
-            whileHover={{ scale: 1.02 }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-fuchsia-500/5 to-indigo-500/5 dark:from-violet-400/10 dark:via-fuchsia-400/10 dark:to-indigo-400/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.015] dark:opacity-[0.03] group-hover:opacity-[0.03] dark:group-hover:opacity-[0.05] transition-opacity duration-500" />
-            <div className="p-6 sm:p-10 space-y-6 sm:space-y-8">
-              <motion.a 
-                href="mailto:bakkeraabhinay@gmail.com" 
-                className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
-                whileHover={{ scale: 1.02, x: 10 }}
-              >
-                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
-                  <Mail className="w-5 h-5 sm:w-6 sm:h-6" />
+        <div className="grid gap-8 md:grid-cols-3">
+          {socialLinks.map((social, index) => (
+            <motion.a
+              key={social.title}
+              href={social.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative overflow-hidden rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-lg dark:shadow-2xl border border-gray-100/50 dark:border-gray-700/50 hover:border-violet-500/50 dark:hover:border-violet-500/50 transition-all duration-500"
+              whileHover={{ 
+                scale: 1.03,
+                y: -5,
+                transition: { duration: 0.3 }
+              }}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-500`} />
+              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] dark:opacity-[0.07] group-hover:opacity-[0.07] dark:group-hover:opacity-[0.1] transition-opacity duration-500" />
+              
+              <div className="p-8 sm:p-10 flex flex-col items-center text-center space-y-5">
+                <motion.div 
+                  className="p-5 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 dark:from-violet-400/10 dark:to-fuchsia-400/10 text-violet-600 dark:text-violet-400"
+                  whileHover={{ 
+                    rotate: 360,
+                    scale: 1.1,
+                    transition: { duration: 0.5 }
+                  }}
+                >
+                  {social.icon}
+                </motion.div>
+                
+                <div>
+                  <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+                    {social.title}
+                  </h4>
+                  <p className="text-sm text-gray-600 dark:text-gray-300">
+                    {social.display}
+                  </p>
                 </div>
-                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300 break-all">bakkeraabhinay@gmail.com</span>
-              </motion.a>
-              <motion.a 
-                href="https://github.com/Abhinay2206" 
-                className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
-                whileHover={{ scale: 1.02, x: 10 }}
-              >
-                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
-                  <Github className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300">github.com/Abhinay2206</span>
-              </motion.a>
-              <motion.a 
-                href="https://linkedin.com/in/bakkeraabhinay" 
-                className="group flex items-center gap-4 sm:gap-6 p-4 sm:p-6 rounded-xl sm:rounded-2xl hover:bg-gray-50/80 dark:hover:bg-gray-800/80 transition-all duration-300"
-                whileHover={{ scale: 1.02, x: 10 }}
-              >
-                <div className="p-3 sm:p-4 rounded-xl sm:rounded-2xl bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-300 group-hover:scale-110 transition-transform duration-300">
-                  <Linkedin className="w-5 h-5 sm:w-6 sm:h-6" />
-                </div>
-                <span className="text-sm sm:text-lg text-gray-700 dark:text-gray-300">linkedin.com/in/bakkeraabhinay</span>
-              </motion.a>
-            </div>
-          </motion.div>
+
+                <motion.div
+                  className="flex items-center space-x-2 text-violet-600 dark:text-violet-400 font-medium"
+                  whileHover={{ x: 5 }}
+                >
+                  <span>Connect</span>
+                  <motion.span
+                    initial={{ x: 0 }}
+                    whileHover={{ x: 5 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    →
+                  </motion.span>
+                </motion.div>
+              </div>
+            </motion.a>
+          ))}
         </div>
       </motion.div>
     </section>

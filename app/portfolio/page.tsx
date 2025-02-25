@@ -10,8 +10,10 @@ import { Contact } from '../../components/Contact';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { skills } from '../../data/Skills';
 import { projects } from '../../data/Projects';
+import { useRouter } from 'next/navigation';
 
 const Portfolio = () => {
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
@@ -39,13 +41,17 @@ const Portfolio = () => {
       
       handleScroll();
       checkMobile();
+
+      window.addEventListener('popstate', () => {
+        router.push('/');
+      });
       
       return () => {
         window.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', checkMobile);
       };
     }
-  }, []);
+  }, [router]);
 
   const pageVariants = {
     initial: {

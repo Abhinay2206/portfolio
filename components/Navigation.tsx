@@ -1,8 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { Moon, Sun, Home } from 'lucide-react';
+import { Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useRouter } from 'next/navigation';
 
 interface NavigationProps {
   scrolled: boolean;
@@ -10,7 +9,6 @@ interface NavigationProps {
 
 export const Navigation: React.FC<NavigationProps> = ({ scrolled }) => {
   const [theme, setTheme] = useState('dark');
-  const router = useRouter();
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('theme') || 'dark';
@@ -77,16 +75,6 @@ export const Navigation: React.FC<NavigationProps> = ({ scrolled }) => {
             Abhinay
           </motion.span>
           <div className="flex gap-6 items-center">
-            <motion.button
-              variants={buttonVariants}
-              whileHover="hover"
-              whileTap="tap"
-              onClick={() => router.push('/')}
-              className="p-2.5 rounded-lg bg-gray-50 dark:bg-violet-900/30 shadow-sm hover:shadow-md transition-all duration-300"
-              aria-label="Go home"
-            >
-              <Home className="w-5 h-5 text-violet-600 dark:text-violet-400" />
-            </motion.button>
             <motion.button
               variants={buttonVariants}
               whileHover="hover"

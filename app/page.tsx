@@ -4,7 +4,7 @@
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { useEffect, useState, useRef } from 'react';
 import { useRouter } from 'next/navigation';
-import { Sun, Moon,Info } from 'lucide-react';
+import { Sun, Moon, Info, Sparkles } from 'lucide-react';
 
 export default function Home() {
   const containerRef = useRef(null);
@@ -23,6 +23,7 @@ export default function Home() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [currentQuote, setCurrentQuote] = useState(0);
   const [countdown, setCountdown] = useState(2);
+  const [cursorVariant, setCursorVariant] = useState("default");
 
   const loadingQuotes = [
     "Loading innovation...",
@@ -90,18 +91,18 @@ export default function Home() {
             clearInterval(progressInterval);
             return 100;
           }
-          return prev + 2;
+          return prev + 2; // Increased increment for faster progress
         });
-      }, 30);
+      }, 20); // Decreased interval for smoother animation
 
       const quoteInterval = setInterval(() => {
         setCurrentQuote(prev => (prev + 1) % loadingQuotes.length);
-      }, 800);
+      }, 1000); // Increased quote duration
 
       setTimeout(() => {
         clearInterval(quoteInterval);
         router.push('/portfolio');
-      }, 2300);
+      }, 3000); // Increased total loading time to match navigation
     }, 2300);
 
     return () => clearTimeout(timer);
@@ -130,22 +131,23 @@ export default function Home() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
+        whileHover={{ scale: 1.05 }}
         className={`fixed top-6 sm:top-8 left-6 sm:left-8 z-50 flex items-center gap-3 px-4 sm:px-5 py-2 sm:py-2.5 rounded-2xl ${
           isDark ? 'bg-white/10 text-white' : 'bg-black/10 text-black'
-        } backdrop-blur-xl text-sm sm:text-base font-medium`}
+        } backdrop-blur-xl text-sm sm:text-base font-medium border border-violet-500/20`}
       >
         <Info className="w-4 h-4 sm:w-5 sm:h-5" />
         <span>Redirecting in {countdown}s</span>
       </motion.div>
 
-      <div className="absolute inset-0 bg-[conic-gradient(at_top,_var(--tw-gradient-stops))] from-violet-500/30 via-transparent to-fuchsia-500/30 pointer-events-none" />
+      <div className="absolute inset-0 bg-[conic-gradient(at_top,_var(--tw-gradient-stops))] from-violet-500/30 via-transparent to-fuchsia-500/30 pointer-events-none animate-pulse" />
 
       <motion.div 
         className="pointer-events-none fixed inset-0 z-30"
         animate={{
           background: `radial-gradient(
-            800px circle at ${50 + mousePosition.x * 30}% ${50 + mousePosition.y * 30}%, 
-            ${isDark ? 'rgba(139, 92, 246, 0.15)' : 'rgba(139, 92, 246, 0.1)'}, 
+            1000px circle at ${50 + mousePosition.x * 40}% ${50 + mousePosition.y * 40}%, 
+            ${isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.15)'}, 
             transparent
           )`
         }}
@@ -165,7 +167,7 @@ export default function Home() {
           isDark 
             ? 'bg-white/10 text-yellow-400 hover:bg-white/15' 
             : 'bg-black/10 text-violet-600 hover:bg-black/15'
-        } backdrop-blur-xl transition-all duration-500 shadow-lg`}
+        } backdrop-blur-xl transition-all duration-500 shadow-lg border border-violet-500/20`}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
@@ -177,22 +179,23 @@ export default function Home() {
         </motion.div>
       </motion.button>
 
-      {/* Background Particles */}
+      {/* Enhanced Background Particles */}
       <div className="absolute inset-0">
         <div className="absolute inset-0">
-          {[...Array(150)].map((_, i) => (
+          {[...Array(200)].map((_, i) => (
             <motion.div
               key={i}
               className={`absolute h-[2px] w-[2px] rounded-full ${
-                isDark ? 'bg-violet-400/30' : 'bg-violet-500/30'
+                isDark ? 'bg-violet-400/40' : 'bg-violet-500/40'
               }`}
               style={{
                 left: `${Math.random() * 100}%`,
                 top: `${Math.random() * 100}%`,
               }}
               animate={{
-                scale: [0, 2, 0],
+                scale: [0, 2.5, 0],
                 opacity: [0, 1, 0],
+                y: [0, Math.random() * -20],
               }}
               transition={{
                 duration: 2 + Math.random() * 4,
@@ -205,17 +208,17 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Loading Screen */}
+      {/* Enhanced Loading Screen */}
       <AnimatePresence mode="wait">
         {isLoading && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-2xl bg-black/70 px-6"
+            className="fixed inset-0 z-50 flex flex-col items-center justify-center backdrop-blur-3xl bg-black/80 px-6"
           >
             <motion.div 
-              className="relative w-72 h-1.5 bg-white/20 rounded-full overflow-hidden mb-10"
+              className="relative w-80 h-2 bg-white/20 rounded-full overflow-hidden mb-10"
             >
               <motion.div
                 className="absolute top-0 left-0 h-full bg-gradient-to-r from-violet-600 via-fuchsia-600 to-pink-600"
@@ -223,10 +226,21 @@ export default function Home() {
                 animate={{ width: `${loadingProgress}%` }}
                 transition={{ duration: 0.2 }}
               />
+              <motion.div
+                className="absolute top-0 left-0 h-full w-20 bg-white/30"
+                animate={{
+                  x: ['-100%', '400%'],
+                }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  ease: "linear"
+                }}
+              />
             </motion.div>
 
             <motion.p
-              className="text-violet-200 font-medium text-center text-base sm:text-lg tracking-wide"
+              className="text-violet-200 font-medium text-center text-lg sm:text-xl tracking-wider"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               key={currentQuote}
@@ -237,7 +251,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
+      {/* Enhanced Main Content */}
       <AnimatePresence>
         {showContent && (
           <div className="relative z-10 flex min-h-screen items-center justify-center px-6">
@@ -246,21 +260,73 @@ export default function Home() {
                 initial={{ opacity: 0, y: 50 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 1 }}
+                style={{
+                  perspective: "2000px"
+                }}
               >
                 <motion.h1
                   key="welcome"
-                  initial={{ opacity: 0, scale: 0.5 }}
-                  animate={{ opacity: 1, scale: 1 }}
+                  initial={{ opacity: 0, scale: 0.5, rotateX: -90, z: -500 }}
+                  animate={{ 
+                    opacity: 1, 
+                    scale: 1,
+                    rotateX: 0,
+                    z: 0,
+                    textShadow: isDark 
+                      ? "0 1px 0 #c9c9c9, 0 2px 0 #bbb, 0 3px 0 #aaa, 0 4px 0 #999, 0 6px 0 #888, 0 8px 15px rgba(139, 92, 246, 0.4), 0 0 10px rgba(139, 92, 246, 0.2), 0 2px 20px rgba(139, 92, 246, 0.3), 0 4px 30px rgba(139, 92, 246, 0.2), 0 8px 40px rgba(139, 92, 246, 0.25)"
+                      : "0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 6px 0 #aaa, 0 8px 15px rgba(139, 92, 246, 0.3), 0 0 10px rgba(139, 92, 246, 0.1), 0 2px 20px rgba(139, 92, 246, 0.2), 0 4px 30px rgba(139, 92, 246, 0.15)"
+                  }}
                   exit={{ opacity: 0, scale: 1.5, y: 1000 }}
-                  transition={{ duration: 0.8, ease: "easeIn" }}
-                  className={`text-5xl sm:text-7xl md:text-9xl font-bold mb-10 bg-clip-text text-transparent bg-gradient-to-r ${
+                  transition={{ 
+                    duration: 1.2, 
+                    ease: [0.68, -0.6, 0.32, 1.6]
+                  }}
+                  className={`text-6xl sm:text-8xl md:text-9xl font-bold mb-10 transform-gpu ${
                     isDark 
-                      ? 'from-violet-400 via-fuchsia-300 to-pink-400'
-                      : 'from-violet-600 via-fuchsia-600 to-pink-600'
+                      ? 'text-white'
+                      : 'text-violet-900'
                   }`}
+                  whileHover={{
+                    scale: 1.05,
+                    rotateY: [-5, 5],
+                    rotateX: [-2, 2],
+                    transition: { 
+                      duration: 0.8,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut"
+                    }
+                  }}
                 >
-                  Welcome
+                  <motion.span 
+                    className={`bg-clip-text text-transparent bg-gradient-to-r ${
+                      isDark 
+                        ? 'from-violet-400 via-fuchsia-300 to-pink-400'
+                        : 'from-violet-600 via-fuchsia-600 to-pink-600'
+                    } [text-shadow:_0_1px_20px_rgb(139_92_246_/_40%)] transform-gpu inline-block`}
+                    animate={{
+                      backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    }}
+                    transition={{
+                      duration: 5,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  >
+                    Welcome
+                  </motion.span>
                 </motion.h1>
+                
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.5 }}
+                  className={`text-xl sm:text-2xl ${isDark ? 'text-violet-200' : 'text-violet-800'} font-light`}
+                >
+                  <Sparkles className="inline-block mr-2 animate-pulse" />
+                  Prepare to be amazed
+                  <Sparkles className="inline-block ml-2 animate-pulse" />
+                </motion.div>
               </motion.div>
             </div>
           </div>

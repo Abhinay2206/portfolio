@@ -41,6 +41,7 @@ export default function Home() {
     const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
     setIsDark(isDarkMode);
     document.documentElement.classList.toggle('dark', isDarkMode);
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 
     const handleMouseMove = (e: MouseEvent) => {
       const { clientX, clientY } = e;

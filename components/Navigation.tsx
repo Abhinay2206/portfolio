@@ -2,30 +2,60 @@
 import { useState, useEffect } from 'react';
 import { Moon, Sun } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 interface NavigationProps {
   scrolled: boolean;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ scrolled }) => {
-  const [theme, setTheme] = useState('dark');
+  const [theme, setTheme] = useState('');
+  const router = useRouter(); 
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'dark';
-    setTheme(savedTheme);
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const savedTheme = localStorage.getItem('theme');
+    if (!savedTheme) {
+      setTheme(isDarkMode ? 'dark' : 'light');
+      localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+    } else {
+      setTheme(savedTheme);
+    }
+    if (savedTheme) {
+      setTheme(savedTheme);
+      if (savedTheme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
   }, []);
 
   useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
+    if (theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      localStorage.setItem('theme', theme);
     }
-    localStorage.setItem('theme', theme);
   }, [theme]);
 
   const toggleTheme = () => {
     setTheme(theme === 'light' ? 'dark' : 'light');
+  };
+
+  const handleContactClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleNameClick = () => {
+    router.push('/');
   };
 
   const navVariants = {
@@ -71,6 +101,7 @@ export const Navigation: React.FC<NavigationProps> = ({ scrolled }) => {
           <motion.span 
             className="text-2xl font-bold bg-gradient-to-r from-violet-500 via-fuchsia-500 to-indigo-500 dark:from-violet-400 dark:via-fuchsia-400 dark:to-indigo-400 bg-clip-text text-transparent bg-[length:200%_auto] hover:animate-gradient"
             whileHover={{ scale: 1.05 }}
+            onClick={handleNameClick} 
           >
             Abhinay
           </motion.span>
@@ -100,7 +131,8 @@ export const Navigation: React.FC<NavigationProps> = ({ scrolled }) => {
               </AnimatePresence>
             </motion.button>
             <motion.a 
-              href="#contact" 
+              href="#contact"
+              onClick={handleContactClick}
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"

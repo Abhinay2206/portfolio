@@ -174,6 +174,7 @@ const Portfolio = () => {
                 whileInView="animate"
                 viewport={{ once: true, margin: "-50px" }}
                 className="px-4 md:px-0"
+                id='contact'
               >
                 <Contact />
               </motion.div>

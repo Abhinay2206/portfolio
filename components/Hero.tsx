@@ -27,6 +27,14 @@ export const Hero = () => {
     document.body.removeChild(link)
   }
 
+  const handleLetsTalkClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const orbs = [
     { icon: <Code className="w-4 h-4 sm:w-6 sm:h-6" />, color: "from-violet-500/20" },
     { icon: <Star className="w-4 h-4 sm:w-6 sm:h-6" />, color: "from-fuchsia-500/20" },
@@ -225,7 +233,7 @@ export const Hero = () => {
                 size={20}
                 className="text-violet-600 dark:text-violet-400 transform group-hover:rotate-12 transition-transform"
               />
-              <a href="#contact" className="text-violet-600 dark:text-violet-400">
+              <a onClick={handleLetsTalkClick} className="text-violet-600 dark:text-violet-400">
                 Let&apos;s Talk
               </a>
             </motion.button>

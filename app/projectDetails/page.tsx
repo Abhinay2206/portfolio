@@ -239,7 +239,7 @@ const ProjectDetailsContent = () => {
                     src={`/images/${project.projectDetails.images[currentImageIndex].url}`}
                     alt={project.projectDetails.images[currentImageIndex].caption}
                     fill
-                    className="object-cover"
+                    className="object-contain bg-gray-100 dark:bg-gray-800"
                   />
                   <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/70 to-transparent">
                     <p className="text-white text-center">

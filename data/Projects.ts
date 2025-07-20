@@ -1,6 +1,96 @@
 
 export const projects = [
     {
+      title: "SafeStreets - Road Damage Detection and Management System",
+      description: "AI-powered system for detecting and managing road damages using Vision Transformer models, mobile applications, and comprehensive dashboards.",
+      tech: ["React", "Material UI", "Node.js", "Express.js", "MongoDB", "Vision Transformer", "Mapbox/Leaflet", "JWT"],
+      features: ["AI damage classification", "GPS-tagged image capture", "Severity assessment", "Interactive map view", "Task assignment", "Field worker management", "Role-based access control"],
+      demo: "https://safestreets.vercel.app/",
+      github: "https://github.com/safestreets-g408/safestreets",
+      projectDetails: {
+        overview: "A comprehensive road maintenance solution that combines mobile applications, AI-powered damage detection, and administrative dashboards to streamline the identification, classification, and repair of road damages.",
+        images: [
+          {
+            url: "road-damage/dashboard.png",
+            caption: "Administrative dashboard with damage analytics and interactive heatmap visualization"
+          },
+          {
+            url: "road-damage/mobile-app.png",
+            caption: "Mobile application interface for field workers with GPS-tagged image capture"
+          },
+          {
+            url: "road-damage/damage-detection.png",
+            caption: "AI-powered damage detection showing classification results with severity assessment"
+          },
+          {
+            url: "road-damage/task-management.png",
+            caption: "Task assignment and field worker management interface with status tracking"
+          }
+        ],
+        challenges: [
+          "Training Vision Transformer models with limited road damage datasets",
+          "Building a reliable offline-first mobile application for field workers",
+          "Implementing accurate GPS tagging in various environmental conditions",
+          "Designing an efficient task assignment system based on geographic proximity"
+        ],
+        solutions: [
+          "Utilized transfer learning and data augmentation techniques for ViT model training",
+          "Implemented IndexedDB for offline storage and synchronization in the mobile app",
+          "Developed a custom GPS accuracy algorithm with fallback mechanisms",
+          "Created an optimized task routing system using geospatial indexing"
+        ],
+        impact: "Reduced road repair response time by 60% and improved damage classification accuracy to 92%, leading to more efficient maintenance operations and safer road conditions"
+      }
+    },
+    {
+      title: "BonkBot",
+      description: "An automated trading and utility bot built on the Solana blockchain, designed to streamline trading and interaction with the $BONK token ecosystem.",
+      tech: ["React.js", "Node.js", "Express.js", "Solana Web3.js", "PostgreSQL", "TypeScript", "JWT"],
+      features: [
+        "Phantom & Solflare wallet authentication",
+        "BONK price tracking and portfolio value visualization",
+        "Secure API with rate limiting and encryption",
+        "Clean and responsive React dashboard",
+        "Basic trading automation (coming soon)",
+        "AI-powered trading strategies (coming soon)"
+      ],
+      github: "https://github.com/Abhinay2206/BonkBot",
+      projectDetails: {
+        overview: "A comprehensive trading and utility bot for the Solana blockchain that offers secure wallet integration, real-time portfolio tracking, and advanced trading features for the $BONK token ecosystem.",
+        images: [
+          {
+            url: "bonkbot/dashboard.png",
+            caption: "User-friendly dashboard with comprehensive portfolio tracking and value visualization"
+          },
+          {
+            url: "bonkbot/wallet-integration.png",
+            caption: "Secure wallet integration with Phantom and Solflare authentication flow"
+          },
+          {
+            url: "bonkbot/price-tracking.png",
+            caption: "Real-time BONK price tracking with historical data and trend analysis"
+          },
+          {
+            url: "bonkbot/trading-interface.png",
+            caption: "Advanced trading interface with automation options and strategy configuration"
+          }
+        ],
+        challenges: [
+          "Ensuring secure wallet integration and transaction signing",
+          "Building reliable real-time price tracking for Solana tokens",
+          "Implementing efficient trading automation within blockchain constraints",
+          "Designing a scalable architecture for future AI trading strategies"
+        ],
+        solutions: [
+          "Leveraged Solana Wallet Adapter for secure wallet connections",
+          "Implemented WebSocket connections to multiple price oracles for redundancy",
+          "Developed optimized transaction batching for efficient trading operations",
+          "Created modular architecture to support future AI strategy integration"
+        ],
+        impact: "Simplified $BONK token trading experience with secure, user-friendly tools that reduce complexity and improve portfolio management for Solana users"
+      }
+    },
+    {
       title: "Real-Time Inventory Management System",
       description: "Enterprise-grade inventory management system with real-time tracking, AI-powered analytics, and comprehensive business intelligence.",
       tech: ["React", "Material UI", "Node.js", "Express.js", "MongoDB", "Socket.io", "TensorFlow", "scikit-learn"],
@@ -11,27 +101,27 @@ export const projects = [
         images: [
           {
             url: "ims-img/landing.png",
-            caption: "Modern landing page with intuitive navigation and key metrics"
+            caption: "Modern landing page with intuitive navigation and key performance metrics dashboard"
           },
           {
             url: "ims-img/dashboard.png",
-            caption: "Real-time dashboard with actionable insights and KPIs"
+            caption: "Real-time inventory dashboard with actionable insights and interactive KPIs"
           },
           {
             url: "ims-img/charts.png",
-            caption: "Interactive data visualization with predictive analytics"
+            caption: "Interactive data visualization with predictive analytics and trend forecasting"
           },
           {
             url: "ims-img/customer-analysis.png",
-            caption: "Advanced customer segmentation and behavior analysis"
+            caption: "Advanced customer segmentation with behavior analysis and purchasing patterns"
           },
           {
             url: "ims-img/supplier-analysis.png",
-            caption: "Comprehensive supplier performance metrics and scoring"
+            caption: "Comprehensive supplier performance metrics with reliability scoring system"
           },
           {
             url: "ims-img/stock-recommendation.png",
-            caption: "ML-powered inventory optimization recommendations"
+            caption: "ML-powered inventory optimization with automated stock level recommendations"
           }
         ],
         challenges: [
@@ -59,19 +149,19 @@ export const projects = [
         images: [
           {
             url: "cnn/dashboard.png",
-            caption: "Real-time monitoring dashboard with quality metrics"
+            caption: "Real-time monitoring dashboard with comprehensive water quality metrics and alerts"
           },
           {
             url: "cnn/main.png",
-            caption: "Intuitive image upload interface with instant analysis"
+            caption: "Intuitive image upload interface with instant analysis and classification results"
           },
           {
             url: "cnn/history.png",
-            caption: "Comprehensive historical analysis with trend visualization"
+            caption: "Comprehensive historical analysis with interactive trend visualization and reporting"
           },
           {
             url: "cnn/result.png",
-            caption: "Detailed classification results with confidence scores"
+            caption: "Detailed classification results with confidence scores and quality parameters"
           }
         ],
         challenges: [
@@ -106,27 +196,27 @@ export const projects = [
         images: [
           {
             url: "eventmaster/landing.png",
-            caption: "Modern and intuitive landing page"
+            caption: "Modern and intuitive landing page with featured events and search functionality"
           },
           {
             url: "eventmaster/admin-dashboard.png",
-            caption: "Comprehensive admin dashboard with analytics"
+            caption: "Comprehensive admin dashboard with real-time analytics and event management"
           },
           {
             url: "eventmaster/event-management.png",
-            caption: "Event creation and management interface"
+            caption: "Event creation and management interface with customization options"
           },
           {
             url: "eventmaster/seat-selection.png",
-            caption: "Interactive seat selection system"
+            caption: "Interactive seat selection system with real-time availability updates"
           },
           {
             url: "eventmaster/user-orders-page.png",
-            caption: "User order history and tracking"
+            caption: "User order history with detailed tracking and ticket management"
           },
           {
             url: "eventmaster/qr-ticket.png",
-            caption: "Digital QR code ticket generation"
+            caption: "Digital QR code ticket generation with event details and verification"
           }
         ],
         challenges: [
@@ -144,34 +234,4 @@ export const projects = [
         impact: "The system worked reliably to handle ticket sales for many events, making sure no tickets were sold twice and staying online consistently for users"
       }
     },
-    {
-      title: "Attendance Bot for NGIT and KMEC Colleges",
-      description: "Intelligent Telegram bot that automates attendance tracking with real-time notifications and analytics for educational institutions.",
-      tech: ["Node.js", "Telegraf", "Puppeteer", "MongoDB", "Express.js"],
-      features: [
-        "Automated multi-platform attendance tracking",
-        "Real-time attendance notifications",
-        "Advanced analytics and reporting",
-        "Seamless LMS integration",
-        "Custom attendance policies support"
-      ],
-      demo: "https://project3.demo",
-      github: "https://github.com/Abhinay2206/attendence_bot",
-      projectDetails: {
-        overview: "A sophisticated automation solution that transforms attendance management through intelligent bot technology, real-time tracking, and comprehensive analytics.",
-        images: [],
-        challenges: [
-          "Handling complex authentication flows across multiple platforms",
-          "Managing concurrent requests from thousands of users",
-          "Ensuring 24/7 reliability with minimal maintenance"
-        ],
-        solutions: [
-          "Implemented robust session management with JWT authentication",
-          "Developed queue-based architecture for request handling",
-          "Created automated health checks and self-healing mechanisms",
-          "Built comprehensive logging and monitoring system"
-        ],
-        impact: "Deployed across 2 institutions, reducing administrative time by 80% and improving attendance tracking accuracy to 99%"
-      }
-    }
   ];  

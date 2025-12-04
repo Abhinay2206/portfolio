@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { LoadingProvider } from "../context/LoadingProvider";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -8,7 +9,7 @@ const inter = Inter({
 });
 
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-jetbrains-mono", 
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
 });
 
@@ -27,7 +28,9 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        {children}
+        <LoadingProvider>
+          {children}
+        </LoadingProvider>
       </body>
     </html>
   );

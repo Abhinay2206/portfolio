@@ -7,6 +7,8 @@ import About from '../../components/About';
 import { Skills } from '../../components/Skills';
 import { Projects } from '../../components/Projects';
 import { Contact } from '../../components/Contact';
+import { CustomCursor } from '../../components/CustomCursor';
+import { FloatingShapes } from '../../components/FloatingShapes';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
 import { skills } from '../../data/Skills';
 import { projects } from '../../data/Projects';
@@ -38,14 +40,14 @@ const Portfolio = () => {
     if (typeof window !== 'undefined') {
       window.addEventListener('scroll', handleScroll, { passive: true });
       window.addEventListener('resize', checkMobile);
-      
+
       handleScroll();
       checkMobile();
 
       window.addEventListener('popstate', () => {
         router.push('/');
       });
-      
+
       return () => {
         window.removeEventListener('scroll', handleScroll);
         window.removeEventListener('resize', checkMobile);
@@ -64,14 +66,14 @@ const Portfolio = () => {
       transition: {
         duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.1 
+        staggerChildren: 0.1
       }
     },
     exit: {
       opacity: 0,
       y: -20,
       transition: {
-        duration: 0.3, 
+        duration: 0.3,
         ease: "easeIn"
       }
     }
@@ -80,7 +82,7 @@ const Portfolio = () => {
   const sectionVariants = {
     initial: {
       opacity: 0,
-      y: 20 
+      y: 20
     },
     animate: {
       opacity: 1,
@@ -94,16 +96,22 @@ const Portfolio = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div 
+      <motion.div
         initial="initial"
         animate="animate"
         exit="exit"
         variants={pageVariants}
         className="relative"
       >
+        {/* Custom Cursor */}
+        <CustomCursor />
+
+        {/* Floating 3D Shapes Background */}
+        <FloatingShapes />
+
         <motion.div
           className="fixed top-0 left-0 right-0 h-0.5 md:h-1 bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 origin-left z-50"
-          style={{ 
+          style={{
             scaleX,
             transformOrigin: "0%",
             willChange: "transform"
@@ -119,20 +127,20 @@ const Portfolio = () => {
           }}
         />
 
-        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
-          <div 
-            className={`relative ${!isMobile ? 'will-change-transform' : ''}`} 
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 relative">
+          <div
+            className={`relative ${!isMobile ? 'will-change-transform' : ''}`}
             style={{
               perspective: isMobile ? 'none' : '1000px',
               transformStyle: isMobile ? 'flat' : 'preserve-3d',
-              overflowX: 'hidden' 
+              overflowX: 'hidden'
             }}
           >
             <Navigation scrolled={scrolled} />
-            
+
             <div className="space-y-16 md:space-y-24">
               <Hero />
-              
+
               <motion.div
                 variants={sectionVariants}
                 initial="initial"
@@ -160,11 +168,11 @@ const Portfolio = () => {
                 viewport={{ once: true, margin: "-50px" }}
                 className="px-4 md:px-0"
               >
-                <Projects 
+                <Projects
                   projects={projects.map(project => ({
                     ...project,
                     demo: project.demo || ''
-                  }))} 
+                  }))}
                 />
               </motion.div>
 

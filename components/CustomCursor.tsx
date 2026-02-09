@@ -1,44 +1,24 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import { motion, useSpring, useMotionValue } from "framer-motion";
 
-interface CursorState {
-    variant: "default" | "hover" | "text" | "click";
-}
-
 export const CustomCursor = () => {
-    const [cursorState, setCursorState] = useState<CursorState>({
-        variant: "default",
-    });
+    const [isHovering, setIsHovering] = useState(false);
     const [isVisible, setIsVisible] = useState(false);
+
     const cursorX = useMotionValue(-100);
     const cursorY = useMotionValue(-100);
 
-    const springConfig = { damping: 25, stiffness: 200 };
+    const springConfig = { damping: 25, stiffness: 400, mass: 0.3 };
     const cursorXSpring = useSpring(cursorX, springConfig);
     const cursorYSpring = useSpring(cursorY, springConfig);
-
-    const trailRefs = useRef<Array<{ x: number; y: number; opacity: number }>>([]);
-    const [trails, setTrails] = useState<Array<{ x: number; y: number; opacity: number }>>([]);
 
     useEffect(() => {
         const updateCursor = (e: MouseEvent) => {
             cursorX.set(e.clientX);
             cursorY.set(e.clientY);
             setIsVisible(true);
-
-            // Add trail point
-            trailRefs.current.push({
-                x: e.clientX,
-                y: e.clientY,
-                opacity: 1,
-            });
-
-            // Keep only last 10 trail points
-            if (trailRefs.current.length > 10) {
-                trailRefs.current.shift();
-            }
         };
 
         const handleMouseEnter = (e: MouseEvent) => {
@@ -49,28 +29,14 @@ export const CustomCursor = () => {
                 target.tagName === "A" ||
                 target.closest("button") ||
                 target.closest("a") ||
-                target.classList.contains("cursor-magnetic")
+                target.getAttribute("role") === "button"
             ) {
-                setCursorState({ variant: "hover" });
-            } else if (
-                target.tagName === "INPUT" ||
-                target.tagName === "TEXTAREA" ||
-                target.isContentEditable
-            ) {
-                setCursorState({ variant: "text" });
+                setIsHovering(true);
             }
         };
 
         const handleMouseLeave = () => {
-            setCursorState({ variant: "default" });
-        };
-
-        const handleMouseDown = () => {
-            setCursorState({ variant: "click" });
-        };
-
-        const handleMouseUp = () => {
-            setCursorState({ variant: "default" });
+            setIsHovering(false);
         };
 
         const handleMouseOut = () => {
@@ -80,12 +46,9 @@ export const CustomCursor = () => {
         window.addEventListener("mousemove", updateCursor);
         window.addEventListener("mouseenter", () => setIsVisible(true));
         window.addEventListener("mouseleave", handleMouseOut);
-        document.addEventListener("mousedown", handleMouseDown);
-        document.addEventListener("mouseup", handleMouseUp);
 
-        // Add event listeners for interactive elements
         const interactiveElements = document.querySelectorAll(
-            "button, a, input, textarea, [contenteditable], .cursor-magnetic"
+            "button, a, [role='button']"
         );
 
         interactiveElements.forEach((el) => {
@@ -93,31 +56,36 @@ export const CustomCursor = () => {
             el.addEventListener("mouseleave", handleMouseLeave);
         });
 
-        // Trail animation
-        const trailInterval = setInterval(() => {
-            trailRefs.current = trailRefs.current.map((trail) => ({
-                ...trail,
-                opacity: trail.opacity * 0.9,
-            }));
-            setTrails([...trailRefs.current.filter((t) => t.opacity > 0.05)]);
-        }, 50);
+        const observer = new MutationObserver(() => {
+            const newElements = document.querySelectorAll(
+                "button, a, [role='button']"
+            );
+            newElements.forEach((el) => {
+                el.addEventListener("mouseenter", handleMouseEnter as EventListener);
+                el.addEventListener("mouseleave", handleMouseLeave);
+            });
+        });
+
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true,
+        });
 
         return () => {
             window.removeEventListener("mousemove", updateCursor);
             window.removeEventListener("mouseenter", () => setIsVisible(true));
             window.removeEventListener("mouseleave", handleMouseOut);
-            document.removeEventListener("mousedown", handleMouseDown);
-            document.removeEventListener("mouseup", handleMouseUp);
-            clearInterval(trailInterval);
 
             interactiveElements.forEach((el) => {
                 el.removeEventListener("mouseenter", handleMouseEnter as EventListener);
                 el.removeEventListener("mouseleave", handleMouseLeave);
             });
+
+            observer.disconnect();
         };
     }, [cursorX, cursorY]);
 
-    // Hide on mobile/tablet
+    // Hide on touch devices
     useEffect(() => {
         const checkDevice = () => {
             const isTouchDevice = window.matchMedia("(pointer: coarse)").matches;
@@ -133,39 +101,9 @@ export const CustomCursor = () => {
 
     if (!isVisible) return null;
 
-    const cursorSize = {
-        default: 16,
-        hover: 40,
-        text: 4,
-        click: 12,
-    };
-
-    const size = cursorSize[cursorState.variant];
-
     return (
         <>
-            {/* Trail particles */}
-            {trails.map((trail, index) => (
-                <motion.div
-                    key={`trail-${index}`}
-                    className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-screen"
-                    style={{
-                        x: trail.x - 4,
-                        y: trail.y - 4,
-                        opacity: trail.opacity,
-                    }}
-                >
-                    <div
-                        className="w-2 h-2 rounded-full bg-violet-500"
-                        style={{
-                            filter: "blur(2px)",
-                            boxShadow: "0 0 10px rgba(139, 92, 246, 0.8)",
-                        }}
-                    />
-                </motion.div>
-            ))}
-
-            {/* Main cursor */}
+            {/* Simple dot cursor */}
             <motion.div
                 className="fixed top-0 left-0 pointer-events-none z-[9999] mix-blend-difference"
                 style={{
@@ -174,49 +112,22 @@ export const CustomCursor = () => {
                 }}
             >
                 <motion.div
-                    className="relative"
+                    className="relative rounded-full bg-white"
                     animate={{
-                        width: size,
-                        height: size,
-                        x: -size / 2,
-                        y: -size / 2,
+                        width: isHovering ? 40 : 8,
+                        height: isHovering ? 40 : 8,
+                        x: isHovering ? -20 : -4,
+                        y: isHovering ? -20 : -4,
                     }}
                     transition={{
                         type: "spring",
                         stiffness: 500,
                         damping: 28,
                     }}
-                >
-                    <div
-                        className={`w-full h-full rounded-full ${cursorState.variant === "hover"
-                                ? "bg-white/30 border-2 border-white"
-                                : cursorState.variant === "text"
-                                    ? "bg-violet-500"
-                                    : "bg-white"
-                            }`}
-                        style={{
-                            boxShadow:
-                                cursorState.variant === "hover"
-                                    ? "0 0 20px rgba(255, 255, 255, 0.5)"
-                                    : "0 0 10px rgba(255, 255, 255, 0.3)",
-                        }}
-                    />
-
-                    {/* Outer glow ring for hover state */}
-                    {cursorState.variant === "hover" && (
-                        <motion.div
-                            className="absolute inset-0 rounded-full border-2 border-white/20"
-                            initial={{ scale: 1, opacity: 0 }}
-                            animate={{ scale: 1.5, opacity: [0, 0.5, 0] }}
-                            transition={{
-                                duration: 1.5,
-                                repeat: Infinity,
-                                ease: "easeOut",
-                            }}
-                        />
-                    )}
-                </motion.div>
+                />
             </motion.div>
         </>
     );
 };
+
+export default CustomCursor;

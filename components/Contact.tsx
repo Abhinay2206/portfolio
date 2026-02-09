@@ -1,4 +1,4 @@
-import { Mail, Github, Linkedin } from 'lucide-react';
+import { Mail, Github, Linkedin, ArrowUpRight } from 'lucide-react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { useRef } from 'react';
 
@@ -9,122 +9,121 @@ export const Contact = () => {
     offset: ["start end", "end start"]
   });
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5, 1], [0.5, 1, 0.5]);
-  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.98, 1, 0.98]);
-  const y = useTransform(scrollYProgress, [0, 0.5, 1], [30, 0, -30]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.8], [0, 1, 1]);
+  const y = useTransform(scrollYProgress, [0, 0.3], [40, 0]);
 
   const socialLinks = [
     {
-      icon: <Mail className="w-7 h-7" />,
+      icon: <Mail className="w-5 h-5" />,
       title: "Email",
       link: "mailto:bakkeraabhinay@gmail.com",
       display: "bakkeraabhinay@gmail.com",
-      color: "from-violet-600 to-fuchsia-600"
     },
     {
-      icon: <Github className="w-7 h-7" />,
-      title: "GitHub", 
+      icon: <Github className="w-5 h-5" />,
+      title: "GitHub",
       link: "https://github.com/Abhinay2206",
       display: "github.com/Abhinay2206",
-      color: "from-fuchsia-600 to-indigo-600"
     },
     {
-      icon: <Linkedin className="w-7 h-7" />,
+      icon: <Linkedin className="w-5 h-5" />,
       title: "LinkedIn",
       link: "https://linkedin.com/in/bakkeraabhinay",
-      display: "linkedin.com/in/bakkeraabhinay", 
-      color: "from-indigo-600 to-violet-600"
+      display: "linkedin.com/in/bakkeraabhinay",
     }
   ];
 
   return (
-    <section ref={containerRef} id="contact" className="py-32 sm:py-40 relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom,_var(--tw-gradient-stops))] from-violet-200/30 via-transparent to-transparent dark:from-violet-800/20" />
-      
-      <motion.div 
-        className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10"
-        style={{ opacity, scale, y }}
-      >
-        <div className="text-center mb-20">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-6xl sm:text-7xl font-bold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-indigo-600 bg-clip-text text-transparent animate-gradient tracking-tight"
-          >
-            Let&apos;s Connect
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="mt-6 text-lg text-gray-600 dark:text-gray-300"
-          >
-            Feel free to reach out through any of these platforms
-          </motion.p>
-        </div>
+    <section ref={containerRef} id="contact" className="py-24 lg:py-32 relative">
+      <div className="absolute inset-0 bg-mesh opacity-50" />
 
-        <div className="grid gap-8 md:grid-cols-3">
+      <motion.div
+        className="max-w-4xl mx-auto px-6 relative z-10"
+        style={{ opacity, y }}
+      >
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
+          className="text-center mb-12"
+        >
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+            <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 dark:from-violet-400 dark:via-purple-400 dark:to-indigo-400 bg-clip-text text-transparent">
+              Let&apos;s Connect
+            </span>
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400 text-lg max-w-md mx-auto">
+            Have a project in mind or just want to chat? Feel free to reach out.
+          </p>
+        </motion.div>
+
+        {/* Contact Cards */}
+        <div className="grid sm:grid-cols-3 gap-4">
           {socialLinks.map((social, index) => (
             <motion.a
               key={social.title}
               href={social.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group relative overflow-hidden rounded-3xl bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-lg dark:shadow-2xl border border-gray-100/50 dark:border-gray-700/50 hover:border-violet-500/50 dark:hover:border-violet-500/50 transition-all duration-500"
-              whileHover={{ 
-                scale: 1.03,
-                y: -5,
-                transition: { duration: 0.3 }
-              }}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
+              target={social.title !== 'Email' ? '_blank' : undefined}
+              rel={social.title !== 'Email' ? 'noopener noreferrer' : undefined}
+              className="group relative p-5 rounded-xl text-center transition-all duration-500 overflow-hidden bg-white/75 dark:bg-zinc-900/80 backdrop-blur-xl border border-white/50 dark:border-zinc-800/50 shadow-[0_4px_16px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.3),inset_0_1px_0_rgba(255,255,255,0.06)]"
+              initial={{ opacity: 0, scale: 0.8, y: 30 }}
+              whileInView={{ opacity: 1, scale: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              transition={{
+                delay: index * 0.15,
+                type: "spring",
+                stiffness: 180,
+                damping: 13
+              }}
+              whileHover={{
+                y: -6,
+                boxShadow: '0 20px 40px rgba(0, 0, 0, 0.08), 0 0 30px rgba(124, 58, 237, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+              }}
             >
-              <div className={`absolute inset-0 bg-gradient-to-br ${social.color} opacity-0 group-hover:opacity-5 dark:group-hover:opacity-10 transition-opacity duration-500`} />
-              <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-[0.03] dark:opacity-[0.07] group-hover:opacity-[0.07] dark:group-hover:opacity-[0.1] transition-opacity duration-500" />
-              
-              <div className="p-8 sm:p-10 flex flex-col items-center text-center space-y-5">
-                <motion.div 
-                  className="p-5 rounded-2xl bg-gradient-to-br from-violet-500/10 to-fuchsia-500/10 dark:from-violet-400/10 dark:to-fuchsia-400/10 text-violet-600 dark:text-violet-400"
-                  whileHover={{ 
-                    rotate: 360,
-                    scale: 1.1,
-                    transition: { duration: 0.5 }
-                  }}
+              {/* Hover gradient */}
+              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-indigo-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+
+              <div className="relative z-10">
+                <div
+                  className="inline-flex items-center justify-center p-3 rounded-xl mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-12 bg-gradient-to-br from-violet-100/80 to-indigo-100/60 dark:from-violet-900/30 dark:to-indigo-900/20 shadow-[inset_0_1px_0_rgba(255,255,255,0.5),0_2px_4px_rgba(0,0,0,0.02)] dark:shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_2px_4px_rgba(0,0,0,0.2)]"
                 >
-                  {social.icon}
-                </motion.div>
-                
-                <div>
-                  <h4 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-                    {social.title}
-                  </h4>
-                  <p className="text-sm text-gray-600 dark:text-gray-300">
-                    {social.display}
-                  </p>
+                  <span className="text-violet-600 dark:text-violet-400">{social.icon}</span>
                 </div>
 
-                <motion.div
-                  className="flex items-center space-x-2 text-violet-600 dark:text-violet-400 font-medium"
-                  whileHover={{ x: 5 }}
-                >
+                <h3 className="font-semibold text-gray-900 dark:text-white mb-1">
+                  {social.title}
+                </h3>
+
+                <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 truncate">
+                  {social.display}
+                </p>
+
+                <div className="inline-flex items-center gap-1 text-sm font-medium text-violet-600 dark:text-violet-400">
                   <span>Connect</span>
-                  <motion.span
-                    initial={{ x: 0 }}
-                    whileHover={{ x: 5 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    →
-                  </motion.span>
-                </motion.div>
+                  <ArrowUpRight size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform duration-300" />
+                </div>
               </div>
             </motion.a>
           ))}
         </div>
+
+        {/* Footer */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
+          viewport={{ once: true }}
+          transition={{ delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
+          className="text-center mt-16 pt-8 border-t border-gray-200/50 dark:border-zinc-800/50"
+        >
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            © {new Date().getFullYear()} Abhinay Karthik. Built with Next.js & Tailwind CSS.
+          </p>
+        </motion.div>
       </motion.div>
     </section>
   );
 };
+
+export default Contact;

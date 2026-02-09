@@ -1,12 +1,15 @@
 .loading-screen {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
-  height: var(--vh);
+  height: 100vh;
   background-color: #030014;
   z-index: 999999999;
   display: flex;
   place-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 
 .loading-button {
@@ -221,12 +224,15 @@
   0% {
     opacity: 0;
   }
+
   25% {
     opacity: 1;
   }
+
   75% {
     opacity: 1;
   }
+
   100% {
     opacity: 0;
   }
@@ -270,6 +276,7 @@
   0% {
     transform: translateX(0px);
   }
+
   100% {
     transform: translateX(-300px);
   }
@@ -314,6 +321,8 @@
   font-size: 60px;
   font-weight: 600;
   text-transform: uppercase;
+  opacity: 0.08;
+  pointer-events: none;
 }
 
 .loading-marquee span {
@@ -337,24 +346,31 @@
   0% {
     transform: translateY(70px);
   }
+
   15% {
     transform: translateY(10px);
   }
+
   30% {
     transform: translateY(70px);
   }
+
   45% {
     transform: translateY(10px);
   }
+
   67% {
     transform: translateY(70px);
   }
+
   80% {
     transform: translateY(10px);
   }
+
   90% {
     transform: translateY(70px);
   }
+
   100% {
     transform: translateY(70px);
   }
@@ -364,13 +380,16 @@
   .loading-wrap {
     --Lsize: 210px;
   }
+
   .loading-button {
     padding: 30px 70px;
     font-size: 25px;
   }
+
   .loading-container {
     left: 70px;
   }
+
   .loading-marquee {
     font-size: 100px;
   }
@@ -380,6 +399,7 @@
   .loading-header {
     padding: 20px 0px;
   }
+
   .loader-title {
     font-size: 16px;
   }
@@ -389,6 +409,7 @@
   .loading-header {
     padding: 35px 0px;
   }
+
   .loader-title {
     font-size: 18px;
   }

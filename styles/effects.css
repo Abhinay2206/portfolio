@@ -122,34 +122,13 @@
     transform: translateY(-4px) scale(1.02);
 }
 
-/* Cursor Utilities */
-.cursor-magnetic {
-    cursor: pointer;
-}
-
-.cursor-text {
-    cursor: text;
-}
-
-.cursor-disabled {
-    cursor: not-allowed;
-}
-
 /* Hide default cursor on desktop */
 @media (pointer: fine) {
     * {
         cursor: none !important;
     }
-
-    a,
-    button,
-    input,
-    textarea,
-    select,
-    [role="button"] {
-        cursor: none !important;
-    }
 }
+
 
 /* Gradient Utilities */
 .gradient-mesh {
@@ -278,13 +257,8 @@
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
     }
-
-    @media (pointer: fine) {
-        * {
-            cursor: auto !important;
-        }
-    }
 }
+
 
 /* Mobile Optimizations */
 @media (max-width: 768px) {
@@ -296,12 +270,5 @@
     .depth-shadow,
     .depth-shadow-lg {
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-    }
-
-    /* Re-enable default cursor on mobile */
-    @media (pointer: coarse) {
-        * {
-            cursor: auto !important;
-        }
     }
 }

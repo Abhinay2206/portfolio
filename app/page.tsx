@@ -19,13 +19,6 @@ export default function Home() {
   const { isLoading, setLoading } = useLoading();
   const [countdown, setCountdown] = useState(1);
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const handleNavigate = () => {
-    setTimeout(() => {
-      router.push('/portfolio');
-    }, 1500);
-  };
-
   useEffect(() => {
     setMounted(true);
     const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -33,12 +26,12 @@ export default function Home() {
     document.documentElement.classList.toggle('dark', isDarkMode);
     localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
 
-
+    let countdownCleared = false;
     const countdownInterval = setInterval(() => {
       setCountdown((prev) => {
         if (prev <= 1) {
           clearInterval(countdownInterval);
-          handleNavigate();
+          countdownCleared = true;
           return 0;
         }
         return prev - 1;
@@ -48,18 +41,23 @@ export default function Home() {
     // Initialize loading progress
     const progressController = setProgress(setLoading);
 
-    // After welcome screen, complete loading
+    // After countdown completes, finish loading and navigate
     const timer = setTimeout(() => {
       progressController.loaded().then(() => {
-        router.push('/portfolio');
+        // Add a small delay to ensure the loading animation completes
+        setTimeout(() => {
+          router.push('/portfolio');
+        }, 500);
       });
     }, 1500);
 
     return () => {
-      clearInterval(countdownInterval);
+      if (!countdownCleared) {
+        clearInterval(countdownInterval);
+      }
       clearTimeout(timer);
     };
-  }, [router, setLoading, handleNavigate]);
+  }, [router, setLoading]);
 
   const toggleTheme = () => {
     setIsDark(!isDark);

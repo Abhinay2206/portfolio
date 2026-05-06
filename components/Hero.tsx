@@ -1,282 +1,337 @@
-import { ArrowDown, MessageSquare, Github, Linkedin, Sparkles } from "lucide-react"
-import { motion, useScroll, useTransform, useMotionValue, useSpring } from "framer-motion"
-import { useRef } from "react"
-import { TypeAnimation } from "react-type-animation"
+'use client';
 
-// Magnetic button component for premium CTA effect
-const MagneticButton = ({ children, className, onClick, ...props }: React.PropsWithChildren<{
-  className?: string;
-  onClick?: () => void;
-  style?: React.CSSProperties;
-}>) => {
-  const ref = useRef<HTMLButtonElement>(null)
-  const x = useMotionValue(0)
-  const y = useMotionValue(0)
-  const springX = useSpring(x, { stiffness: 150, damping: 15 })
-  const springY = useSpring(y, { stiffness: 150, damping: 15 })
+import { ArrowDown, MessageSquare, Github, Linkedin, ChevronDown } from "lucide-react";
+import { motion, useMotionValue, useSpring, useScroll, useTransform } from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import { TypeAnimation } from "react-type-animation";
+import Marquee from "react-fast-marquee";
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return
-    const rect = ref.current.getBoundingClientRect()
-    const centerX = rect.left + rect.width / 2
-    const centerY = rect.top + rect.height / 2
-    x.set((e.clientX - centerX) * 0.12)
-    y.set((e.clientY - centerY) * 0.12)
-  }
+/* ── Constants ─────────────────────────────────────── */
+const NAME_LETTERS = "ABHINAY".split("");
 
-  const handleMouseLeave = () => {
-    x.set(0)
-    y.set(0)
-  }
+const FLOATING_TAGS = [
+  { name: "React", color: "#61DAFB", x: 72, y: 12, dur: 6.5, delay: 0 },
+  { name: "Node.js", color: "#68A063", x: 88, y: 35, dur: 7.8, delay: 1.2 },
+  { name: "TypeScript", color: "#3B82F6", x: 62, y: 58, dur: 9.0, delay: 0.6 },
+  { name: "MongoDB", color: "#4ADE80", x: 82, y: 72, dur: 6.2, delay: 2.1 },
+  { name: "Python", color: "#FCD34D", x: 55, y: 28, dur: 8.4, delay: 0.3 },
+  { name: "Next.js", color: "#a5b4fc", x: 91, y: 55, dur: 7.0, delay: 1.8 },
+  { name: "TensorFlow", color: "#FB923C", x: 68, y: 82, dur: 10, delay: 0.9 },
+  { name: "PostgreSQL", color: "#60a5fa", x: 76, y: 44, dur: 7.5, delay: 1.5 },
+  { name: "Express", color: "#94a3b8", x: 58, y: 90, dur: 8.8, delay: 2.4 },
+  { name: "Scikit-learn", color: "#f472b6", x: 93, y: 18, dur: 6.8, delay: 0.7 },
+];
 
+const MARQUEE_ITEMS = [
+  "React", "Node.js", "TypeScript", "MongoDB", "Python", "Next.js",
+  "TensorFlow", "PostgreSQL", "Express", "Tailwind CSS", "Docker",
+  "Git", "Scikit-learn", "Flask", "Prisma", "Socket.io",
+];
+
+/* ── Magnetic button ───────────────────────────────── */
+const MagBtn = ({ children, className, onClick, style }: React.PropsWithChildren<{ className?: string; onClick?: () => void; style?: React.CSSProperties }>) => {
+  const ref = useRef<HTMLButtonElement>(null);
+  const x = useMotionValue(0); const y = useMotionValue(0);
+  const sx = useSpring(x, { stiffness: 160, damping: 16 });
+  const sy = useSpring(y, { stiffness: 160, damping: 16 });
   return (
-    <motion.button
-      ref={ref}
-      style={{ x: springX, y: springY }}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={onClick}
-      className={className}
-      whileTap={{ scale: 0.98 }}
-      {...props}
-    >
-      {children}
-    </motion.button>
-  )
-}
+    <motion.button ref={ref} style={{ x: sx, y: sy, ...style }}
+      onMouseMove={e => { const r = ref.current!.getBoundingClientRect(); x.set((e.clientX - r.left - r.width / 2) * 0.14); y.set((e.clientY - r.top - r.height / 2) * 0.14); }}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
+      onClick={onClick} className={className} whileTap={{ scale: 0.97 }}
+    >{children}</motion.button>
+  );
+};
 
+/* ── Hero ──────────────────────────────────────────── */
 export const Hero = () => {
   const containerRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const [isDark, setIsDark] = useState(true);
+  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [hoveredLetter, setHoveredLetter] = useState<number | null>(null);
 
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
-  const y = useTransform(scrollYProgress, [0, 0.5], [0, 50]);
+  const { scrollYProgress } = useScroll({ target: containerRef, offset: ["start start", "end start"] });
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const yAnim = useTransform(scrollYProgress, [0, 0.6], [0, 100]);
 
-  const handleResumeDownload = () => {
-    const link = document.createElement("a")
-    link.href = "/resume.pdf"
-    link.download = "Abhinay_Karthik_Resume.pdf"
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-  }
+  /* theme detection */
+  useEffect(() => {
+    const update = () => setIsDark(document.documentElement.classList.contains('dark'));
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => obs.disconnect();
+  }, []);
 
-  const handleLetsTalkClick = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault()
-    const contactSection = document.getElementById("contact")
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: "smooth" })
-    }
-  }
+  /* mouse spotlight */
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLElement>) => {
+    const { left, top, width, height } = e.currentTarget.getBoundingClientRect();
+    setMousePos({ x: ((e.clientX - left) / width) * 100, y: ((e.clientY - top) / height) * 100 });
+  }, []);
+
+  const downloadCV = () => { const a = document.createElement("a"); a.href = "/resume.pdf"; a.download = "Abhinay_Karthik_Resume.pdf"; a.click(); };
+  const toContact = (e: React.MouseEvent<HTMLButtonElement>) => { e.preventDefault(); document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" }); };
+  const toNext = () => document.getElementById("about")?.scrollIntoView({ behavior: "smooth" });
+
+  /* theme tokens */
+  const bg = isDark ? '#03000f' : '#f8f7ff';
+  const orb1 = isDark ? 'rgba(124,58,237,0.25)' : 'rgba(124,58,237,0.10)';
+  const orb2 = isDark ? 'rgba(79,70,229,0.20)' : 'rgba(79,70,229,0.08)';
+  const spotLight = isDark
+    ? `radial-gradient(circle 600px at ${mousePos.x}% ${mousePos.y}%, rgba(124,58,237,0.10) 0%, transparent 70%)`
+    : `radial-gradient(circle 600px at ${mousePos.x}% ${mousePos.y}%, rgba(124,58,237,0.06) 0%, transparent 70%)`;
+  const dotColor = isDark ? 'rgba(139,92,246,0.45)' : 'rgba(139,92,246,0.20)';
+  const nameCol1 = isDark ? '#ffffff' : '#1e1b4b';
+  const nameCol2 = isDark ? '#a78bfa' : '#7c3aed';
+  const subtitleC = isDark ? '#71717a' : '#9ca3af';
+  const roleGrad = isDark ? 'linear-gradient(90deg,#a5b4fc,#7c3aed)' : 'linear-gradient(90deg,#4f46e5,#7c3aed)';
+  const descCol = isDark ? '#a1a1aa' : '#6b7280';
+  const badgeBg = isDark ? 'rgba(109,40,217,0.18)' : 'rgba(109,40,217,0.08)';
+  const badgeBord = isDark ? 'rgba(139,92,246,0.3)' : 'rgba(139,92,246,0.2)';
+  const badgeText = isDark ? '#c4b5fd' : '#6d28d9';
+  const sec2Bg = isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)';
+  const sec2Bord = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.10)';
+  const sec2Text = isDark ? '#d4d4d8' : '#374151';
+  const socialBg = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)';
+  const socialBrd = isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.09)';
+  const socialCol = isDark ? '#a1a1aa' : '#6b7280';
+  const statVal = isDark ? '#ffffff' : '#111827';
+  const statLbl = isDark ? '#52525b' : '#9ca3af';
+  const divCol = isDark ? 'rgba(255,255,255,0.07)' : 'rgba(0,0,0,0.08)';
+  const mqdText = isDark ? '#52525b' : '#9ca3af';
+  const mqdDot = isDark ? 'rgba(139,92,246,0.4)' : 'rgba(139,92,246,0.25)';
+  const scrollC = isDark ? '#3f3f46' : '#d1d5db';
+  const botFade = isDark ? '#03000f' : '#f8f7ff';
+  const tagBg = isDark ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.8)';
 
   return (
     <section
       ref={containerRef}
-      className="min-h-screen flex items-center justify-center relative overflow-hidden pt-20"
+      className="relative min-h-screen w-full overflow-hidden flex flex-col"
+      onMouseMove={handleMouseMove}
     >
-      {/* Premium gradient mesh background */}
-      <div className="absolute inset-0 bg-mesh" />
-
-      {/* Subtle grid pattern */}
-      <div className="absolute inset-0 bg-grid-subtle opacity-40" />
-
-      {/* Animated gradient orbs with soft glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/4 left-1/4 w-[500px] h-[500px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(124, 58, 237, 0.12) 0%, transparent 70%)',
-            filter: 'blur(40px)',
-          }}
-          animate={{
-            x: [0, 30, 0],
-            y: [0, -20, 0],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{
-            duration: 10,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-        <motion.div
-          className="absolute bottom-1/4 right-1/4 w-[400px] h-[400px] rounded-full"
-          style={{
-            background: 'radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%)',
-            filter: 'blur(40px)',
-          }}
-          animate={{
-            x: [0, -25, 0],
-            y: [0, 25, 0],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{
-            duration: 12,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
+      {/* ── Layered background ── */}
+      <div className="absolute inset-0" style={{ background: bg }}>
+        {/* Mouse spotlight */}
+        <div className="absolute inset-0 transition-all duration-300 pointer-events-none" style={{ background: spotLight }} />
+        {/* Aurora orb 1 */}
+        <motion.div className="absolute rounded-full pointer-events-none"
+          style={{ width: 900, height: 900, background: `radial-gradient(circle, ${orb1} 0%, transparent 65%)`, filter: 'blur(80px)', top: '-20%', left: '-15%' }}
+          animate={{ x: [0, 50, 0], y: [0, 35, 0] }} transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }} />
+        {/* Aurora orb 2 */}
+        <motion.div className="absolute rounded-full pointer-events-none"
+          style={{ width: 700, height: 700, background: `radial-gradient(circle, ${orb2} 0%, transparent 65%)`, filter: 'blur(80px)', bottom: '-15%', right: '-10%' }}
+          animate={{ x: [0, -40, 0], y: [0, -45, 0] }} transition={{ duration: 17, repeat: Infinity, ease: 'easeInOut', delay: 3 }} />
+        {/* Dot grid */}
+        <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.18, backgroundImage: `radial-gradient(circle, ${dotColor} 1px, transparent 1px)`, backgroundSize: '36px 36px' }} />
+        {/* Horizontal lines */}
+        <div className="absolute inset-0 pointer-events-none" style={{ opacity: 0.04, backgroundImage: 'linear-gradient(0deg, transparent calc(100% - 1px), rgba(139,92,246,0.5) 100%)', backgroundSize: '100% 80px' }} />
       </div>
 
-      <motion.div
-        className="max-w-5xl mx-auto px-6 py-16 relative z-10"
-        style={{ opacity, scale, y }}
-      >
-        <div className="text-center space-y-8">
-          {/* Status badge with glassmorphism */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, ease: [0.23, 1, 0.32, 1] }}
-            className="flex justify-center"
-          >
-            <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium backdrop-blur-xl"
-              style={{
-                background: 'rgba(124, 58, 237, 0.08)',
-                border: '1px solid rgba(124, 58, 237, 0.15)',
-                boxShadow: '0 4px 16px rgba(124, 58, 237, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
-              }}
-              whileHover={{ scale: 1.02, boxShadow: '0 6px 20px rgba(124, 58, 237, 0.15)' }}
-            >
-              <Sparkles className="w-4 h-4 text-violet-600 dark:text-violet-400" />
-              <span className="text-violet-700 dark:text-violet-300">Available for work</span>
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-            </motion.div>
-          </motion.div>
+      {/* ── Main content ── */}
+      <motion.div className="relative z-10 flex-1 flex items-center max-w-7xl mx-auto px-6 lg:px-12 w-full pt-24 pb-4" style={{ opacity, y: yAnim }}>
+        <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-4 w-full">
 
-          {/* Main heading */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.23, 1, 0.32, 1] }}
-            className="space-y-4"
-          >
-            <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight">
-              <span className="block text-gray-900 dark:text-white">
-                Hi, I&apos;m{" "}
-                <span className="text-shimmer neon-glow inline-block animate-pulse-scale">
-                  Abhinay
-                </span>
+          {/* LEFT: text */}
+          <div className="flex-1 lg:max-w-[55%] text-center lg:text-left space-y-6">
+
+            {/* Badge */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
+              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase"
+                style={{ background: badgeBg, border: `1px solid ${badgeBord}`, color: badgeText }}>
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                Open to opportunities
               </span>
-            </h1>
+            </motion.div>
 
-            <div className="text-2xl sm:text-3xl md:text-4xl font-semibold text-gray-600 dark:text-gray-300">
+            {/* Hi label */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+              <div className="text-xs font-light tracking-[0.5em] uppercase mb-3" style={{ color: subtitleC }}>
+                Hi, I&apos;m
+              </div>
+
+              {/* Staggered letters */}
+              <div className="flex items-end justify-center lg:justify-start gap-[1px] sm:gap-0.5">
+                {NAME_LETTERS.map((letter, i) => (
+                  <motion.span
+                    key={i}
+                    className="font-black leading-none select-none cursor-default"
+                    style={{
+                      fontSize: 'clamp(3.5rem, 10vw, 7rem)',
+                      display: 'inline-block',
+                      backgroundImage: hoveredLetter === i
+                        ? 'linear-gradient(135deg,#f472b6,#a78bfa,#60a5fa)'
+                        : `linear-gradient(135deg, ${nameCol1} 0%, ${nameCol2} 100%)`,
+                      WebkitBackgroundClip: 'text',
+                      WebkitTextFillColor: 'transparent',
+                      filter: hoveredLetter === i ? 'drop-shadow(0 0 20px rgba(167,139,250,0.8))' : 'none',
+                      transition: 'filter 0.2s',
+                    }}
+                    initial={{ opacity: 0, y: 60, rotateX: -40 }}
+                    animate={{ opacity: 1, y: 0, rotateX: 0 }}
+                    transition={{ delay: 0.3 + i * 0.07, type: 'spring', stiffness: 200, damping: 16 }}
+                    whileHover={{ scale: 1.15, y: -8 }}
+                    onHoverStart={() => setHoveredLetter(i)}
+                    onHoverEnd={() => setHoveredLetter(null)}
+                  >
+                    {letter}
+                  </motion.span>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Role typewriter */}
+            <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.85 }}
+              className="text-lg sm:text-xl md:text-2xl font-semibold"
+              style={{ backgroundImage: roleGrad, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
               <TypeAnimation
-                sequence={[
-                  "I Build Digital Experiences",
-                  3000,
-                  "I Create AI Solutions",
-                  3000,
-                  "I Design User Interfaces",
-                  3000,
-                ]}
-                wrapper="span"
-                speed={40}
-                repeat={Infinity}
-                cursor={true}
+                sequence={["Full-Stack Developer", 2400, "ML Engineer", 2400, "UI / UX Craftsman", 2400, "Open Source Builder", 2400]}
+                wrapper="span" speed={50} repeat={Infinity} cursor
               />
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Subtitle */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.23, 1, 0.32, 1] }}
-            className="text-lg sm:text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto leading-relaxed"
-          >
-            Full-Stack Developer & ML Enthusiast crafting exceptional digital experiences
-            through modern web applications and innovative machine learning solutions.
-          </motion.p>
+            {/* Description */}
+            <motion.p initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.0 }}
+              className="text-sm sm:text-base max-w-md mx-auto lg:mx-0 leading-relaxed" style={{ color: descCol }}>
+              I architect fast, beautiful, intelligent products - from scalable backends to pixel-perfect interfaces.
+            </motion.p>
 
-          {/* CTA Buttons with premium effects */}
+            {/* CTA buttons */}
+            <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.1 }}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-3">
+              <MagBtn onClick={downloadCV}
+                className="group relative flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-white font-semibold text-sm overflow-hidden w-full sm:w-auto justify-center"
+                style={{ background: 'linear-gradient(135deg,#7c3aed,#6d28d9,#4f46e5)', boxShadow: '0 0 0 1px rgba(139,92,246,0.35), 0 8px 32px rgba(109,40,217,0.4)' }}>
+                <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                <ArrowDown size={15} className="relative z-10" />
+                <span className="relative z-10">Download Resume</span>
+              </MagBtn>
+              <motion.button onClick={toContact}
+                className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl text-sm font-semibold w-full sm:w-auto justify-center"
+                style={{ background: sec2Bg, border: `1px solid ${sec2Bord}`, color: sec2Text }}
+                whileHover={{ background: 'rgba(139,92,246,0.10)', borderColor: 'rgba(139,92,246,0.35)', boxShadow: '0 0 24px rgba(139,92,246,0.12)' }}
+                whileTap={{ scale: 0.97 }}>
+                <MessageSquare size={15} /> Let&apos;s Talk
+              </motion.button>
+            </motion.div>
+
+            {/* Socials + stats */}
+            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }}
+              className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-5 pt-1">
+              <div className="flex gap-2.5">
+                {[{ icon: <Github size={16} />, href: "https://github.com/Abhinay2206", label: "GitHub" },
+                { icon: <Linkedin size={16} />, href: "https://linkedin.com/in/bakkeraabhinay", label: "LinkedIn" }]
+                  .map(s => (
+                    <motion.a key={s.label} href={s.href} target="_blank" rel="noopener noreferrer"
+                      className="flex items-center justify-center w-9 h-9 rounded-xl"
+                      style={{ background: socialBg, border: `1px solid ${socialBrd}`, color: socialCol }}
+                      whileHover={{ scale: 1.15, color: '#7c3aed', background: 'rgba(124,58,237,0.12)', borderColor: 'rgba(124,58,237,0.35)', y: -2 }}
+                      whileTap={{ scale: 0.93 }}>
+                      {s.icon}
+                    </motion.a>
+                  ))}
+              </div>
+              <div className="flex items-center gap-4">
+                {[['15+', 'Projects'], ['2+', 'Years'], ['7+', 'Technologies']].map(([val, lbl], i) => (
+                  <div key={lbl} className="flex items-center gap-4">
+                    {i > 0 && <div className="w-px h-6" style={{ background: divCol }} />}
+                    <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.3 + i * 0.1 }}>
+                      <div className="text-base font-bold" style={{ color: statVal }}>{val}</div>
+                      <div className="text-[10px] uppercase tracking-widest" style={{ color: statLbl }}>{lbl}</div>
+                    </motion.div>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+          </div>
+
+          {/* RIGHT: Floating tech chips */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.23, 1, 0.32, 1] }}
-            className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4"
+            className="flex-1 relative hidden lg:block"
+            style={{ height: '500px' }}
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}
           >
-            <MagneticButton
-              onClick={handleResumeDownload}
-              className="ripple-button group relative w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 text-white font-medium overflow-hidden"
-              style={{
-                boxShadow: '0 8px 24px rgba(124, 58, 237, 0.3), 0 2px 8px rgba(124, 58, 237, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
-              }}
-            >
-              <span className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/25 to-white/0 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700" />
-              <ArrowDown size={18} className="animate-soft-bounce" />
-              <span className="relative z-10">Download Resume</span>
-            </MagneticButton>
-
-            <motion.button
-              onClick={handleLetsTalkClick}
-              className="group w-full sm:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-medium transition-all duration-300 backdrop-blur-sm bg-white/60 dark:bg-zinc-800/60 border-[1.5px] border-violet-600/20 dark:border-violet-400/20 shadow-[0_4px_16px_rgba(0,0,0,0.05),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.1)]"
-              whileHover={{
-                y: -2,
-                boxShadow: '0 8px 24px rgba(124, 58, 237, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
-                borderColor: 'rgba(124, 58, 237, 0.4)',
-              }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <MessageSquare size={18} className="text-violet-600 dark:text-violet-400" />
-              <span className="text-violet-600 dark:text-violet-400">Let&apos;s Talk</span>
-            </motion.button>
-          </motion.div>
-
-          {/* Social Links with premium hover */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.23, 1, 0.32, 1] }}
-            className="flex items-center justify-center gap-4 pt-6"
-          >
-            {[
-              { icon: <Github size={20} />, href: "https://github.com/Abhinay2206", label: "GitHub" },
-              { icon: <Linkedin size={20} />, href: "https://linkedin.com/in/bakkeraabhinay", label: "LinkedIn" },
-            ].map((social) => (
-              <motion.a
-                key={social.label}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-3 rounded-xl text-gray-600 dark:text-gray-300 transition-all duration-300 backdrop-blur-sm bg-white/60 dark:bg-zinc-800/60 border border-black/5 dark:border-white/5 shadow-[0_2px_8px_rgba(0,0,0,0.04),inset_0_1px_0_rgba(255,255,255,0.8)] dark:shadow-[0_2px_8px_rgba(0,0,0,0.2),inset_0_1px_0_rgba(255,255,255,0.1)]"
-                whileHover={{
-                  scale: 1.1,
-                  y: -2,
-                  boxShadow: '0 8px 20px rgba(124, 58, 237, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8)',
+            {FLOATING_TAGS.map((tag, i) => (
+              <motion.div
+                key={tag.name}
+                className="absolute"
+                style={{ left: `${tag.x - 50}%`, top: `${tag.y}%` }}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{
+                  opacity: [0.7, 1, 0.7],
+                  y: [0, -18, 0],
+                  x: [0, i % 2 === 0 ? 8 : -8, 0],
+                  scale: [1, 1.04, 1],
                 }}
-                whileTap={{ scale: 0.95 }}
-                title={social.label}
+                transition={{
+                  y: { delay: 0.8 + tag.delay, duration: tag.dur, repeat: Infinity, ease: 'easeInOut' },
+                  x: { delay: 0.8 + tag.delay, duration: tag.dur * 1.3, repeat: Infinity, ease: 'easeInOut' },
+                  scale: { delay: 0.8 + tag.delay, duration: tag.dur, repeat: Infinity, ease: 'easeInOut' },
+                  opacity: { delay: 0.4 + i * 0.1, duration: 0.5 },
+                }}
+                whileHover={{ scale: 1.18, y: -4, zIndex: 10 }}
               >
-                {social.icon}
-              </motion.a>
+                <div className="px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap cursor-default"
+                  style={{
+                    background: tagBg,
+                    border: `1px solid ${tag.color}35`,
+                    color: tag.color,
+                    backdropFilter: 'blur(12px)',
+                    boxShadow: `0 4px 20px ${tag.color}20, 0 0 0 1px ${tag.color}12`,
+                    textShadow: isDark ? `0 0 12px ${tag.color}80` : 'none',
+                  }}
+                >
+                  {tag.name}
+                </div>
+              </motion.div>
             ))}
+
+            {/* Central pulsing ring */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              {[1, 1.5, 2].map((scale, i) => (
+                <motion.div key={i} className="absolute rounded-full border"
+                  style={{ width: 180, height: 180, borderColor: isDark ? `rgba(124,58,237,${0.15 - i * 0.04})` : `rgba(124,58,237,${0.1 - i * 0.03})` }}
+                  animate={{ scale: [scale, scale + 0.12, scale], opacity: [0.5, 1, 0.5] }}
+                  transition={{ duration: 3 + i, repeat: Infinity, ease: 'easeInOut', delay: i * 0.8 }}
+                />
+              ))}
+              <motion.div className="w-16 h-16 rounded-full flex items-center justify-center text-lg font-black"
+                style={{ background: isDark ? 'rgba(124,58,237,0.15)' : 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.3)', color: isDark ? '#c4b5fd' : '#7c3aed', boxShadow: '0 0 40px rgba(124,58,237,0.2)' }}
+                animate={{ rotate: [0, 360] }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}>
+                &lt;/&gt;
+              </motion.div>
+            </div>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Scroll indicator with subtle animation */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1, duration: 0.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-          className="w-6 h-10 rounded-full flex justify-center pt-2 border-2 border-violet-600/20 dark:border-violet-400/20 bg-white/40 dark:bg-zinc-800/40 backdrop-blur-sm"
-        >
-          <motion.div className="w-1.5 h-1.5 bg-violet-500 rounded-full" />
-        </motion.div>
+      {/* ── Infinite tech marquee ── */}
+      <motion.div className="relative z-10 py-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.4 }}>
+        <div className="absolute inset-0 pointer-events-none" style={{ background: `linear-gradient(to right, ${botFade} 0%, transparent 15%, transparent 85%, ${botFade} 100%)`, zIndex: 2 }} />
+        <Marquee speed={35} gradient={false} className="overflow-hidden">
+          {MARQUEE_ITEMS.map((item) => (
+            <span key={item} className="inline-flex items-center gap-2 mx-5 text-xs font-medium" style={{ color: mqdText }}>
+              <span className="w-1.5 h-1.5 rounded-full" style={{ background: mqdDot }} />
+              {item}
+            </span>
+          ))}
+        </Marquee>
       </motion.div>
-    </section>
-  )
-}
 
-export default Hero
+      {/* Bottom section fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-28 z-10 pointer-events-none" style={{ background: `linear-gradient(to top, ${botFade}, transparent)` }} />
+
+      {/* Scroll hint */}
+      <motion.button onClick={toNext} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.6 }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-1 hover:text-violet-500 transition-colors"
+        style={{ color: scrollC }}>
+        <span className="text-[9px] tracking-[0.25em] uppercase font-medium">Scroll</span>
+        <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
+          <ChevronDown size={15} />
+        </motion.div>
+      </motion.button>
+    </section>
+  );
+};
+
+export default Hero;

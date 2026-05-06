@@ -33,13 +33,14 @@ const ProjectDetailsContent = () => {
   }, [currentProjectIndex]);
 
   useEffect(() => {
+    const images = project.projectDetails?.images;
+    if (!images || images.length === 0) return;
     const interval = setInterval(() => {
       nextImage();
     }, 4000);
-
     return () => clearInterval(interval);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentImageIndex, project.projectDetails.images]);
+  }, [currentImageIndex, project.projectDetails?.images]);
 
   const date = new Date().toLocaleDateString('en-US', {
     year: 'numeric',
@@ -60,18 +61,16 @@ const ProjectDetailsContent = () => {
   };
 
   const nextImage = () => {
-    if (project.projectDetails.images) {
-      setCurrentImageIndex((prev) =>
-        prev === project.projectDetails.images.length - 1 ? 0 : prev + 1
-      );
+    const images = project.projectDetails?.images;
+    if (images && images.length > 0) {
+      setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
     }
   };
 
   const prevImage = () => {
-    if (project.projectDetails.images) {
-      setCurrentImageIndex((prev) =>
-        prev === 0 ? project.projectDetails.images.length - 1 : prev - 1
-      );
+    const images = project.projectDetails?.images;
+    if (images && images.length > 0) {
+      setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
     }
   };
 
@@ -192,20 +191,22 @@ const ProjectDetailsContent = () => {
       {/* Content */}
       <div className="max-w-4xl mx-auto px-6 pb-16">
         {/* Overview */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Project Overview</h2>
-          <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
-            {project.projectDetails.overview}
-          </p>
-        </motion.section>
+        {project.projectDetails?.overview && (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Project Overview</h2>
+            <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-lg">
+              {project.projectDetails.overview}
+            </p>
+          </motion.section>
+        )}
 
         {/* Images Carousel */}
-        {project.projectDetails.images && project.projectDetails.images.length > 0 && (
+        {project.projectDetails?.images && project.projectDetails.images.length > 0 && (
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -258,44 +259,48 @@ const ProjectDetailsContent = () => {
         )}
 
         {/* Challenges & Solutions */}
-        <motion.section
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mb-12 space-y-8"
-        >
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Development Journey</h2>
-
-          <div className="grid md:grid-cols-2 gap-6">
-            <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
-              <h3 className="text-lg font-semibold text-violet-600 dark:text-violet-400 mb-4">Challenges</h3>
-              <ul className="space-y-3">
-                {project.projectDetails.challenges.map((challenge, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 text-sm">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xs font-medium">
-                      {index + 1}
-                    </span>
-                    <span>{challenge}</span>
-                  </li>
-                ))}
-              </ul>
+        {(project.projectDetails?.challenges?.length || project.projectDetails?.solutions?.length) ? (
+          <motion.section
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12 space-y-8"
+          >
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Development Journey</h2>
+            <div className="grid md:grid-cols-2 gap-6">
+              {project.projectDetails?.challenges && project.projectDetails.challenges.length > 0 && (
+                <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+                  <h3 className="text-lg font-semibold text-violet-600 dark:text-violet-400 mb-4">Challenges</h3>
+                  <ul className="space-y-3">
+                    {project.projectDetails.challenges.map((challenge, index) => (
+                      <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 text-sm">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-violet-100 dark:bg-violet-900/30 text-violet-600 dark:text-violet-400 flex items-center justify-center text-xs font-medium">
+                          {index + 1}
+                        </span>
+                        <span>{challenge}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {project.projectDetails?.solutions && project.projectDetails.solutions.length > 0 && (
+                <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
+                  <h3 className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-4">Solutions</h3>
+                  <ul className="space-y-3">
+                    {project.projectDetails.solutions.map((solution, index) => (
+                      <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 text-sm">
+                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-medium">
+                          {index + 1}
+                        </span>
+                        <span>{solution}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
-
-            <div className="p-5 rounded-xl bg-white dark:bg-zinc-900 border border-gray-200 dark:border-zinc-800">
-              <h3 className="text-lg font-semibold text-indigo-600 dark:text-indigo-400 mb-4">Solutions</h3>
-              <ul className="space-y-3">
-                {project.projectDetails.solutions.map((solution, index) => (
-                  <li key={index} className="flex items-start gap-3 text-gray-600 dark:text-gray-300 text-sm">
-                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xs font-medium">
-                      {index + 1}
-                    </span>
-                    <span>{solution}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </motion.section>
+          </motion.section>
+        ) : null}
 
         {/* Impact */}
         {project.projectDetails.impact && (
